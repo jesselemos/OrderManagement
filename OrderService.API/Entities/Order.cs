@@ -1,13 +1,16 @@
-﻿namespace Order.API.Commands.CreateOrder
+﻿using OrderService.API.Common;
+
+namespace OrderService.API.Entities
 {
-    public class CreateOrder : ICommand
+    public class Order : EntityBase
     {
-        public CreateOrder()
-        {
-            Id = Guid.NewGuid();
-        }
-        public Guid Id { get; set; }
-        public Guid ProductId { get; set; }
+        //public Order() { 
+
+        //}
+
+        public string UserName { get; set; }
+        public string Name { get; set; }
+        public decimal TotalPrice { get; set; }
 
         // Delivery Address
         public string FirstName { get; set; }

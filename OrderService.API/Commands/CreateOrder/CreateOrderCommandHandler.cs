@@ -1,4 +1,4 @@
-﻿namespace Order.API.Commands.CreateOrder
+﻿namespace OrderService.API.Commands.CreateOrder
 {
     public class CreateOrderCommandHandler
     {

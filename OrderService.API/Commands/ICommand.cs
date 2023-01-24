@@ -1,4 +1,4 @@
-﻿namespace Order.API.Commands
+﻿namespace OrderService.API.Commands
 {
     public interface ICommand
     {
