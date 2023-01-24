@@ -29,6 +29,12 @@ namespace OrderService.API.Controllers
             return CreatedAtRoute("GetOrderById", new { id = createdOrder.Id }, createdOrder);
         }
 
+        //TODO:: - Update the order delivery address
+        //TODO:: - Update the order items
+        //TODO:: - Cancel an order
+        //TODO:: - Retrieve a single order
+        //TODO:: - Retrieve a paginated list of orders
+
         [HttpGet("{id:Guid}", Name = "GetOrderById")]
         public async Task<ActionResult> GetOrderById(Guid id)
         {

@@ -6,6 +6,7 @@ namespace OrderService.API.Commands.CreateOrder
     {
         public CreateOrderCommandValidator()
         {
+            //TODO::Review Validators
             //RuleFor(p => p.Order.UserName)
             //    .NotEmpty().WithMessage("{UserName} is required.")
             //    .NotNull()
