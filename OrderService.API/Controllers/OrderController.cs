@@ -22,8 +22,15 @@ namespace OrderService.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<ActionResult<int>> CreateOrder([FromBody] Order order)
         {
-            await _mediator.Send(new CreateOrderCommand(order));
-            return StatusCodes.Status201Created;
+            var orderToReturn = await _mediator.Send(new CreateOrderCommand(order));
+            return CreatedAtRoute("GetOrderById", new { id = orderToReturn.Id }, orderToReturn);
+        }
+
+        [HttpGet("{id:int}", Name = "GetOrderById")]
+        public async Task<ActionResult> GetOrderById(int id)
+        {
+            var order = await _mediator.Send(new GetOrderByIdQuery(id));
+            return Ok(order);
         }
 
 
