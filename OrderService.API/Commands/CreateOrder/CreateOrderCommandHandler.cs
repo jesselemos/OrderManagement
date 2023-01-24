@@ -1,6 +1,6 @@
 ﻿using MediatR;
-using OrderService.API.DataStore;
 using OrderService.API.Entities;
+using OrderService.API.Repositories;
 
 namespace OrderService.API.Commands.CreateOrder
 {

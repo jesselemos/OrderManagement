@@ -1,5 +1,5 @@
 using MediatR;
-using OrderService.API.DataStore;
+using OrderService.API.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 

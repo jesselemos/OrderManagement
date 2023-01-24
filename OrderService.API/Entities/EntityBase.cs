@@ -1,4 +1,4 @@
-﻿namespace OrderService.API.Common
+﻿namespace OrderService.API.Entities
 {
     public abstract class EntityBase
     {

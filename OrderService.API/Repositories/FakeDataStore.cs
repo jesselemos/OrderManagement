@@ -1,6 +1,6 @@
 ﻿using OrderService.API.Entities;
 
-namespace OrderService.API.DataStore
+namespace OrderService.API.Repositories
 {
     public class FakeDataStore
     {

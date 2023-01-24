@@ -1,6 +1,4 @@
-﻿using OrderService.API.Common;
-
-namespace OrderService.API.Entities
+﻿namespace OrderService.API.Entities
 {
     public class Order : EntityBase
     {
