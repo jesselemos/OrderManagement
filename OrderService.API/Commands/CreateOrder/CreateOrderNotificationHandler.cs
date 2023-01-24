@@ -5,13 +5,13 @@ namespace OrderService.API.Commands.CreateOrder
 {
     public class CreateOrderNotificationHandler : INotificationHandler<CreateOrderNotification>
     {
-        private readonly FakeDataStore _fakeDataStore;
+        private readonly IOrderRepository _orderRepository;
 
-        public CreateOrderNotificationHandler(FakeDataStore fakeDataStore) => _fakeDataStore = fakeDataStore;
+        public CreateOrderNotificationHandler(IOrderRepository orderRepository) => _orderRepository = orderRepository;
 
         public async Task Handle(CreateOrderNotification notification, CancellationToken cancellationToken)
         {
-            await _fakeDataStore.EventOccured(notification.Order, "Order Created");
+            await _orderRepository.EventOccured(notification.Order, "Order Created");
             await Task.CompletedTask;
         }
     }

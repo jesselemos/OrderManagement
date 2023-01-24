@@ -3,12 +3,15 @@ using OrderService.API.Repositories;
 using System.Reflection;
 using FluentValidation;
 using OrderService.API.Behaviour;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddMediatR(typeof(Program));
-builder.Services.AddSingleton<FakeDataStore>();
+
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddDbContext<OrderDbContext>(opt => opt.UseInMemoryDatabase("OrderDb"));
 
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));

@@ -6,12 +6,12 @@ namespace OrderService.API.Commands.CreateOrder
 {
     public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Order>
     {
-        private readonly FakeDataStore _fakeDataStore;
-        public CreateOrderCommandHandler(FakeDataStore fakeDataStore) => _fakeDataStore = fakeDataStore;
+        private readonly IOrderRepository _orderRepository;
+        public CreateOrderCommandHandler(IOrderRepository orderRepository) => _orderRepository = orderRepository;
 
         public async Task<Order> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
-            await _fakeDataStore.AddOrder(request.Order);
+            await _orderRepository.CreateOrder(request.Order);
             return request.Order;
         }
     }

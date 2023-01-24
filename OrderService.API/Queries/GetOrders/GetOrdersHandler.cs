@@ -6,11 +6,11 @@ namespace OrderService.API.Queries.GetOrders
 {
     public class GetOrdersHandler : IRequestHandler<GetOrdersQuery, IEnumerable<Order>>
     {
-        private readonly FakeDataStore _fakeDataStore;
+        private readonly IOrderRepository _orderRepository;
 
-        public GetOrdersHandler(FakeDataStore fakeDataStore) => _fakeDataStore = fakeDataStore;
+        public GetOrdersHandler(IOrderRepository orderRepository) => _orderRepository = orderRepository;
 
         public async Task<IEnumerable<Order>> Handle(GetOrdersQuery request,
-            CancellationToken cancellationToken) => await _fakeDataStore.GetAllOrders();
+            CancellationToken cancellationToken) => await _orderRepository.GetAllOrders();
     }
 }
