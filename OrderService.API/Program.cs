@@ -1,11 +1,17 @@
 using MediatR;
 using OrderService.API.Repositories;
+using System.Reflection;
+using FluentValidation;
+using OrderService.API.Behaviour;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddMediatR(typeof(Program));
 builder.Services.AddSingleton<FakeDataStore>();
+
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
 builder.Services.AddControllers();
 
