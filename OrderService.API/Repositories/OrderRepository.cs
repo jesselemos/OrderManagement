@@ -24,14 +24,15 @@ namespace OrderService.API.Repositories
             await Task.CompletedTask;
         }
 
-        public async Task<Order> GetOrderById(int id)
+        public async Task<Order> GetOrderById(Guid id)
         {
             return await _orderDbContext.Orders.SingleAsync(s => s.Id == id);
         }
 
         public async Task EventOccured(Order order, string evt)
         {
-            _orderDbContext.Orders.Single(p => p.Id == order.Id).Name = $"{order.Name} evt: {evt}";
+            //TODO::Move to a product repository and update the product inventory
+            _orderDbContext.Orders.Single(p => p.Id == order.Id).CustomerName = $"{order.CustomerName} evt: {evt}";
             await Task.CompletedTask;
         }
     }

@@ -29,8 +29,8 @@ namespace OrderService.API.Controllers
             return CreatedAtRoute("GetOrderById", new { id = createdOrder.Id }, createdOrder);
         }
 
-        [HttpGet("{id:int}", Name = "GetOrderById")]
-        public async Task<ActionResult> GetOrderById(int id)
+        [HttpGet("{id:Guid}", Name = "GetOrderById")]
+        public async Task<ActionResult> GetOrderById(Guid id)
         {
             var order = await _mediator.Send(new GetOrderByIdQuery(id));
             return Ok(order);
