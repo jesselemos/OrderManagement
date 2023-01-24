@@ -11,7 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddMediatR(typeof(Program));
 
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-builder.Services.AddDbContext<OrderDbContext>(opt => opt.UseInMemoryDatabase("OrderDb"));
+builder.Services.AddDbContext<OrderDbContext>(opt => 
+opt.UseInMemoryDatabase("OrderDb")
+.EnableSensitiveDataLogging());
 
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
