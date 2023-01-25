@@ -5,7 +5,7 @@ using OrderService.API.Repositories;
 
 namespace OrderService.API.Commands.CreateOrder
 {
-    public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Order>
+    public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Guid>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
@@ -16,13 +16,13 @@ namespace OrderService.API.Commands.CreateOrder
             _mapper = mapper;
         }
 
-        public async Task<Order> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
             var newOrder = _mapper.Map<Order>(request);
 
 
-            await _orderRepository.CreateOrder(newOrder);
-            return newOrder;
+            await _orderRepository.CreateOrderAsync(newOrder);
+            return newOrder.Id;
         }
     }
 }

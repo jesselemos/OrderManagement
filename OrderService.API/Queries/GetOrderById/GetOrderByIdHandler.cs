@@ -11,6 +11,6 @@ namespace OrderService.API.Queries.GetOrders
         public GetOrderByIdHandler(IOrderRepository orderRepository) => _orderRepository = orderRepository;
 
         public async Task<Order> Handle(GetOrderByIdQuery request,
-            CancellationToken cancellationToken) => await _orderRepository.GetOrderById(request.Id);
+            CancellationToken cancellationToken) => await _orderRepository.GetOrderByIdAsync(request.Id);
     }
 }

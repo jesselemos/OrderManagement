@@ -9,7 +9,7 @@ namespace OrderService.API.UnitTests
     {
         public DbContextOptions<OrderDbContext> _orderDbContextOptions;
         private OrderDbContext _orderDbContext;
-        private readonly IMapper _mapper;
+        private readonly IMapper? _mapper;
 
         [SetUp]
         public void Setup()

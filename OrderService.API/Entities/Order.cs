@@ -12,6 +12,9 @@
         //TODO::Map new entities to datatable
         // public Product? Product { get; set; }
         public Guid? ProductId { get; set; }
-        public Address? DeliveryAddress { get; set; }
+        public string? AddressName { get; set; }
+        public string? AddressLine { get; set; }
+        public string? County { get; set; }
+        public string? EirCode { get; set; }
     }
 }

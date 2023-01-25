@@ -11,7 +11,8 @@ namespace OrderService.API.Commands.CreateOrder
 
         public async Task Handle(CreateOrderNotification notification, CancellationToken cancellationToken)
         {
-            await _orderRepository.EventOccured(notification.Order, "Order Created");
+            //TODO:: Update product inventory
+            // await _orderRepository.EventOccured(notification.Order, "Order Created");
             await Task.CompletedTask;
         }
     }

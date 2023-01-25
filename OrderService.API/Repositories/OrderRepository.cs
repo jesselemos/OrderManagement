@@ -11,25 +11,30 @@ namespace OrderService.API.Repositories
             _orderDbContext = orderDbContext;
         }
 
-        public async Task<IEnumerable<Order>> GetAllOrders()
+        public async Task<IEnumerable<Order>> GetAllOrdersAsync()
         {
             var orderList = await _orderDbContext.Orders.ToListAsync();
             return orderList;
         }
 
-        public async Task CreateOrder(Order order)
+        public async Task CreateOrderAsync(Order order)
         {
             _orderDbContext.Orders.Add(order);
             await _orderDbContext.SaveChangesAsync();
-            await Task.CompletedTask;
         }
 
-        public async Task<Order> GetOrderById(Guid id)
+        public async Task UpdateOrderAsync(Order order)
+        {
+            _orderDbContext.Entry(order).State = EntityState.Modified;
+            await _orderDbContext.SaveChangesAsync();
+        }
+
+        public async Task<Order> GetOrderByIdAsync(Guid id)
         {
             return await _orderDbContext.Orders.SingleAsync(s => s.Id == id);
         }
 
-        public async Task EventOccured(Order order, string evt)
+        public async Task EventOccuredAsync(Order order, string evt)
         {
             //TODO::Move to a product repository and update the product inventory
             _orderDbContext.Orders.Single(p => p.Id == order.Id).CustomerName = $"{order.CustomerName} evt: {evt}";

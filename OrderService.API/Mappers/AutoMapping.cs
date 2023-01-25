@@ -9,6 +9,7 @@ namespace OrderService.API.Mappers
         public AutoMapping()
         {
             CreateMap<CreateOrderCommand, Order>();
+            CreateMap<UpdateOrderAddressCommand, Order>();
         }
     }
 }

@@ -11,6 +11,6 @@ namespace OrderService.API.Queries.GetOrders
         public GetOrdersHandler(IOrderRepository orderRepository) => _orderRepository = orderRepository;
 
         public async Task<IEnumerable<Order>> Handle(GetOrdersQuery request,
-            CancellationToken cancellationToken) => await _orderRepository.GetAllOrders();
+            CancellationToken cancellationToken) => await _orderRepository.GetAllOrdersAsync();
     }
 }
