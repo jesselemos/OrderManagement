@@ -5,11 +5,12 @@ namespace OrderService.API.Repositories
 {
     public class OrderDbContext : DbContext
     {
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Product> Products { get; set; }
+
         public OrderDbContext(DbContextOptions<OrderDbContext> options) : base(options)
         {
         }
-
-        public DbSet<Order> Orders { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -19,7 +20,7 @@ namespace OrderService.API.Repositories
                 {
                     case EntityState.Added:
                         entry.Entity.CreatedDate = DateTime.Now;
-                          break;
+                        break;
                     case EntityState.Modified:
                         entry.Entity.LastModifiedDate = DateTime.Now;
                         break;

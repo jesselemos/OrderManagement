@@ -8,10 +8,11 @@
         }
         public string OrderStatus { get; set; } = Entities.OrderStatus.Created;
         public string? CustomerName { get; set; }
-        public decimal TotalPrice { get; set; }
-        //TODO::Map new entities to datatable
+        // public decimal TotalPrice { get; set; }
+
         // public Product? Product { get; set; }
-        public Guid? ProductId { get; set; }
+        public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        // public Guid? ProductId { get; set; }
         public string? AddressName { get; set; }
         public string? AddressLine { get; set; }
         public string? County { get; set; }

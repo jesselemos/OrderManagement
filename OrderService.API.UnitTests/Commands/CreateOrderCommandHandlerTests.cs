@@ -31,8 +31,8 @@ namespace OrderService.API.UnitTests
                 new CreateOrderCommand()
                 {
                     CustomerName = "Name",
-                    TotalPrice = 10,
-                    ProductId = Guid.NewGuid()
+                    //TotalPrice = 10,
+                    //ProductId = Guid.NewGuid()
                 }, new CancellationToken());
 
             Assert.That(obj, Is.Not.Null);
