@@ -5,6 +5,7 @@ using FluentValidation;
 using OrderService.API.Behaviours;
 using Microsoft.EntityFrameworkCore;
 using OrderService.API.Repositories.DataSeed;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +28,15 @@ builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Order Management API",
+        Description = "API for managing orders"
+    });
+});
 
 var app = builder.Build();
 

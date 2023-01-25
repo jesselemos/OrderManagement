@@ -19,8 +19,8 @@ namespace OrderService.API.Controllers
         }
 
         [HttpPost(Name = "CreateOrder")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<ActionResult<int>> CreateOrder([FromBody] CreateOrderCommand createOrderCommand)
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        public async Task<ActionResult<Guid>> CreateOrder([FromBody] CreateOrderCommand createOrderCommand)
         {
             var createdOrder = await _mediator.Send(createOrderCommand);
 
