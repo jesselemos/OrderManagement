@@ -6,7 +6,7 @@
         {
             Id = Guid.NewGuid();
         }
-
+        public string OrderStatus { get; set; } = Entities.OrderStatus.Created;
         public string? CustomerName { get; set; }
         public decimal TotalPrice { get; set; }
         //TODO::Map new entities to datatable

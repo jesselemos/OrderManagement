@@ -11,9 +11,15 @@ namespace OrderService.API.Repositories
             _orderDbContext = orderDbContext;
         }
 
-        public async Task<IEnumerable<Order>> GetAllOrdersAsync()
+        public async Task<IEnumerable<Order>> GetAllOrdersAsync(int take, int skip)
         {
-            var orderList = await _orderDbContext.Orders.ToListAsync();
+            var orderList =
+                await _orderDbContext
+                .Orders
+                .OrderByDescending(o => o.CreatedDate)
+                .Take(take)
+                .Skip(skip)
+                .ToListAsync();
             return orderList;
         }
 

@@ -18,7 +18,6 @@ namespace OrderService.API.Controllers
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
-        // - Create a new order
         [HttpPost(Name = "CreateOrder")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<ActionResult<int>> CreateOrder([FromBody] CreateOrderCommand createOrderCommand)
@@ -27,29 +26,40 @@ namespace OrderService.API.Controllers
 
             await _mediator.Publish(new CreateOrderNotification(createOrderCommand));
 
-            //TODO::Investigate Id
             return CreatedAtRoute("GetOrderById", new { id = createdOrder }, createdOrder);
         }
 
-        //- Update the order delivery address
-        [HttpPut(Name = "UpdateOrderAddress")]
+        [HttpPut("address", Name = "UpdateOrderAddress")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
-        public async Task<ActionResult> UpdateOrder([FromBody] UpdateOrderAddressCommand command)
+        public async Task<ActionResult> UpdateOrderAddress([FromBody] UpdateOrderAddressCommand command)
         {
             await _mediator.Send(command);
             return NoContent();
         }
 
-
-        //TODO:: - Update the order items
-        //TODO:: - Cancel an order
-
-
-        //- Retrieve a single order
-        [HttpGet("{id:Guid}", Name = "GetOrderById")]
+        [HttpPut("items", Name = "UpdateOrderItems")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult> UpdateOrderItems([FromBody] UpdateOrderItemsCommand command)
+        {
+            await _mediator.Send(command);
+            return NoContent();
+        }
+
+        [HttpDelete(Name = "CancelOrder")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Order), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> CancelOrder([FromBody] CancelOrderCommand command)
+        {
+            await _mediator.Send(command);
+            //TODO::Send notification to update product inventory
+            return Ok();
+        }
+
+        [HttpGet("{id:Guid}", Name = "GetOrderById")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(Order), (int)HttpStatusCode.OK)]
         public async Task<ActionResult> GetOrderById(Guid id)
@@ -58,13 +68,13 @@ namespace OrderService.API.Controllers
             return Ok(order);
         }
 
-
-        //TODO:: - Paginate this list of orders
-        [HttpGet(Name = "Order")]
+        [HttpGet("{take:int}/{skip:int}", Name = "Order")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(IEnumerable<Order>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult> GetOrders()
+        public async Task<ActionResult> GetOrders(int take = 10, int skip = 0)
         {
-            var orders = await _mediator.Send(new GetOrdersQuery());
+            //TODO::Improve pagination
+            var orders = await _mediator.Send(new GetOrdersQuery(take, skip));
             return Ok(orders);
         }
     }

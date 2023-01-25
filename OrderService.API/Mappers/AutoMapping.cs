@@ -10,6 +10,8 @@ namespace OrderService.API.Mappers
         {
             CreateMap<CreateOrderCommand, Order>();
             CreateMap<UpdateOrderAddressCommand, Order>();
+            CreateMap<UpdateOrderItemsCommand, Order>();
+            CreateMap<CancelOrderCommand, Order>();
         }
     }
 }
