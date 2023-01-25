@@ -73,7 +73,6 @@ namespace OrderService.API.Controllers
         [ProducesResponseType(typeof(IEnumerable<Order>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult> GetOrders(int take = 10, int skip = 0)
         {
-            //TODO::Improve pagination
             var orders = await _mediator.Send(new GetOrdersQuery(take, skip));
             return Ok(orders);
         }
