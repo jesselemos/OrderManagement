@@ -27,7 +27,6 @@ namespace OrderService.API.Repositories
 
         public async Task CreateOrderAsync(Order order)
         {
-            // _orderDbContext.OrderItems.Add(order.OrderItems);
             _orderDbContext.Orders.Add(order);
             await _orderDbContext.SaveChangesAsync();
         }
@@ -35,6 +34,38 @@ namespace OrderService.API.Repositories
         public async Task UpdateOrderAsync(Order order)
         {
             _orderDbContext.Entry(order).State = EntityState.Modified;
+            _orderDbContext.Entry(order).CurrentValues.SetValues(order);
+            await _orderDbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateOrderItemsAsync(Order order, List<OrderItem> newItems)
+        {
+            _orderDbContext.Entry(order).State = EntityState.Modified;
+            _orderDbContext.Entry(order).CurrentValues.SetValues(order);
+
+            foreach (var existingItem in order.OrderItems.ToList())
+            {
+                if (!newItems.Any(c => c.Product?.Id == existingItem.Product?.Id))
+                {
+                    _orderDbContext.OrderItems.Remove(existingItem);
+                }
+            }
+
+            foreach (var newItem in newItems)
+            {
+                var existingItem = order.OrderItems.Where(c => c.Product?.Id == newItem.Product?.Id).SingleOrDefault();
+
+                if (existingItem != null)
+                {
+                    existingItem.Quantity = newItem.Quantity;
+                    _orderDbContext.Entry(existingItem).CurrentValues.SetValues(existingItem);
+                }
+                else
+                {
+                    order.OrderItems.Add(newItem);
+                }
+            }
+
             await _orderDbContext.SaveChangesAsync();
         }
 

@@ -4,7 +4,7 @@
     {
         public Product()
         {
-            Id = Guid.NewGuid();
+            Id = new();
         }
 
         public string? Name { get; set; }

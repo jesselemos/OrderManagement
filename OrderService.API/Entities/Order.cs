@@ -4,11 +4,11 @@
     {
         public Order()
         {
-            Id = Guid.NewGuid();
+            Id = new();
         }
         public string OrderStatus { get; set; } = Entities.OrderStatus.Created;
         public string? CustomerName { get; set; }
-        public List<OrderItem> OrderItems { get; set; }
+        public List<OrderItem> OrderItems { get; set; } = new();
         public string? AddressName { get; set; }
         public string? AddressLine { get; set; }
         public string? County { get; set; }

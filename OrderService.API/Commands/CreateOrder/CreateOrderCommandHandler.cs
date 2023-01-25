@@ -13,8 +13,8 @@ namespace OrderService.API.Commands.CreateOrder
 
         public CreateOrderCommandHandler(IOrderRepository orderRepository, IProductRepository productRepository, IMapper mapper)
         {
-            _productRepository = productRepository;
             _orderRepository = orderRepository;
+            _productRepository = productRepository;
             _mapper = mapper;
         }
 

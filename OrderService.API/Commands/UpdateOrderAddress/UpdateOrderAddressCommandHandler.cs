@@ -27,7 +27,6 @@ namespace OrderService.API.Commands.CreateOrder
 
             _mapper.Map(request, orderToUpdate, typeof(UpdateOrderAddressCommand), typeof(Order));
 
-
             await _orderRepository.UpdateOrderAsync(orderToUpdate);
 
             return Unit.Value;
