@@ -1,6 +1,6 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using OrderService.API.Commands.CreateOrder;
-using OrderService.API.Entities;
 using OrderService.API.Repositories;
 
 namespace OrderService.API.UnitTests
@@ -9,6 +9,7 @@ namespace OrderService.API.UnitTests
     {
         public DbContextOptions<OrderDbContext> _orderDbContextOptions;
         private OrderDbContext _orderDbContext;
+        private readonly IMapper _mapper;
 
         [SetUp]
         public void Setup()
@@ -26,12 +27,13 @@ namespace OrderService.API.UnitTests
         {
             var repository = new OrderRepository(_orderDbContext);
 
-            var obj = new CreateOrderCommandHandler(repository).Handle(
-                new CreateOrderCommand(
-                new Order
+            var obj = new CreateOrderCommandHandler(repository, _mapper).Handle(
+                new CreateOrderCommand()
                 {
-                    // TotalPrice = 10
-                }), new CancellationToken());
+                    CustomerName = "Name",
+                    TotalPrice = 10,
+                    ProductId = Guid.NewGuid()
+                }, new CancellationToken());
 
             Assert.That(obj, Is.Not.Null);
             Assert.Pass();

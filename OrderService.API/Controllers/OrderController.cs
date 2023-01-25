@@ -2,7 +2,6 @@ using MediatR;
 using OrderService.API.Commands.CreateOrder;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using OrderService.API.Entities;
 using OrderService.API.Queries.GetOrders;
 
 namespace OrderService.API.Controllers
@@ -20,9 +19,9 @@ namespace OrderService.API.Controllers
 
         [HttpPost(Name = "CreateOrder")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<ActionResult<int>> CreateOrder([FromBody] Order order)
+        public async Task<ActionResult<int>> CreateOrder([FromBody] CreateOrderCommand createOrderCommand)
         {
-            var createdOrder = await _mediator.Send(new CreateOrderCommand(order));
+            var createdOrder = await _mediator.Send(createOrderCommand);
 
             await _mediator.Publish(new CreateOrderNotification(createdOrder));
 

@@ -8,10 +8,11 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddMediatR(typeof(Program));
+builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-builder.Services.AddDbContext<OrderDbContext>(opt => 
+builder.Services.AddDbContext<OrderDbContext>(opt =>
 opt.UseInMemoryDatabase("OrderDb")
 .EnableSensitiveDataLogging());
 
