@@ -16,6 +16,8 @@ namespace OrderService.API.Repositories
             var orderList =
                 await _orderDbContext
                 .Orders
+                .Include("OrderItems")
+                .Include("OrderItems.Product")
                 .OrderByDescending(o => o.CreatedDate)
                 .Take(take)
                 .Skip(skip)
@@ -25,6 +27,7 @@ namespace OrderService.API.Repositories
 
         public async Task CreateOrderAsync(Order order)
         {
+            // _orderDbContext.OrderItems.Add(order.OrderItems);
             _orderDbContext.Orders.Add(order);
             await _orderDbContext.SaveChangesAsync();
         }
@@ -35,9 +38,13 @@ namespace OrderService.API.Repositories
             await _orderDbContext.SaveChangesAsync();
         }
 
-        public async Task<Order> GetOrderByIdAsync(Guid id)
+        public async Task<Order?> GetOrderByIdAsync(Guid id)
         {
-            return await _orderDbContext.Orders.SingleAsync(s => s.Id == id);
+            return await _orderDbContext
+                .Orders
+                .Include("OrderItems")
+                .Include("OrderItems.Product")
+                .SingleOrDefaultAsync(s => s.Id == id);
         }
 
         public async Task EventOccuredAsync(Order order, string evt)

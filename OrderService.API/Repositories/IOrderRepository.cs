@@ -6,7 +6,7 @@ namespace OrderService.API.Repositories
     {
         public Task<IEnumerable<Order>> GetAllOrdersAsync(int take = 10, int skip = 0);
         public Task CreateOrderAsync(Order order);
-        public Task<Order> GetOrderByIdAsync(Guid id);
+        public Task<Order?> GetOrderByIdAsync(Guid id);
         public Task UpdateOrderAsync(Order order);
         public Task EventOccuredAsync(Order order, string evt);
     }

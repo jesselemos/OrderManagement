@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using OrderService.API.Entities;
+using OrderService.API.Exceptions;
 using OrderService.API.Repositories;
 
 namespace OrderService.API.Commands.CreateOrder
@@ -19,10 +20,10 @@ namespace OrderService.API.Commands.CreateOrder
         public async Task<Unit> Handle(UpdateOrderAddressCommand request, CancellationToken cancellationToken)
         {
             var orderToUpdate = await _orderRepository.GetOrderByIdAsync(request.OrderId);
-            //if (orderToUpdate == null)
-            //{
-            //    throw new NotFoundException(nameof(Order), request.OrderId);
-            //}
+            if (orderToUpdate == null)
+            {
+                throw new NotFoundException(nameof(Order), request.OrderId);
+            }
 
             _mapper.Map(request, orderToUpdate, typeof(UpdateOrderAddressCommand), typeof(Order));
 

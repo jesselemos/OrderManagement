@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using OrderService.API.Commands.CreateOrder;
 using OrderService.API.Repositories;
+using OrderService.API.UnitTests.Helpers;
 
 namespace OrderService.API.UnitTests
 {
@@ -9,7 +10,7 @@ namespace OrderService.API.UnitTests
     {
         public DbContextOptions<OrderDbContext> _orderDbContextOptions;
         private OrderDbContext _orderDbContext;
-        private readonly IMapper? _mapper;
+        private IMapper _mapper;
 
         [SetUp]
         public void Setup()
@@ -20,17 +21,33 @@ namespace OrderService.API.UnitTests
                 .Options;
 
             _orderDbContext = new OrderDbContext(_orderDbContextOptions);
+
+            _mapper = AutoMapperHelper.CreateMapper();
         }
 
         [Test]
         public void Test1()
         {
-            var repository = new OrderRepository(_orderDbContext);
+            var orderRepository = new OrderRepository(_orderDbContext);
+            var productRepository = new ProductRepository(_orderDbContext);
 
-            var obj = new CreateOrderCommandHandler(repository, _mapper).Handle(
+            var obj = new CreateOrderCommandHandler(orderRepository, productRepository, _mapper).Handle(
                 new CreateOrderCommand()
                 {
                     CustomerName = "Name",
+                    AddressLine = "AddressLine",
+                    AddressName = "AddressName",
+                    EirCode = "EirCode",
+                    County = "County",
+                    OrderItems = new List<Models.CreateOrderItem>
+                    {
+                        new Models.CreateOrderItem
+                        {
+                            ProductId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                            Quantity = 10
+                        }
+                    }
+
                     //TotalPrice = 10,
                     //ProductId = Guid.NewGuid()
                 }, new CancellationToken());

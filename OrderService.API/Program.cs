@@ -13,6 +13,7 @@ builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddDbContext<OrderDbContext>(opt =>
 opt.UseInMemoryDatabase("OrderDb")
 .EnableSensitiveDataLogging());
