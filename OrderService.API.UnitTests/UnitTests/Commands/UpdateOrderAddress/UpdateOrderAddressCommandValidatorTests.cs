@@ -1,31 +1,21 @@
-﻿using OrderService.API.Commands.CreateOrder;
-using OrderService.API.Models;
-using OrderService.API.UnitTests.Helpers;
+﻿using OrderService.API.Commands.UpdateOrderAddress;
 
-namespace OrderService.API.UnitTests.Commands.CreateOrder
+namespace OrderService.API.Tests.UnitTests.Commands.UpdateOrderAddress
 {
     [TestFixture]
-    public class CreateOrderCommandValidatorTests
+    public class UpdateOrderAddressCommandValidatorTests
     {
         [Test]
-        public async Task CreateOrderCommandValidatorIsValid()
+        public async Task UpdateOrderAddressCommandValidatorIsValid()
         {
-            var validator = new CreateOrderCommandValidator();
-            var command = new CreateOrderCommand()
+            var validator = new UpdateOrderAddressCommandValidator();
+            var command = new UpdateOrderAddressCommand()
             {
-                CustomerName = "CustomerName",
+                OrderId = Guid.NewGuid(),
                 AddressLine = "AddressLine",
                 AddressName = "AddressName",
                 EirCode = "EirCode",
                 County = "County",
-                OrderItems = new List<CreateOrderItem>
-                    {
-                        new CreateOrderItem
-                        {
-                            ProductId = DatabaseHelper.ProductSeedId,
-                            Quantity = 10
-                        }
-                    }
             };
 
             var result = await validator.ValidateAsync(command);
@@ -37,15 +27,14 @@ namespace OrderService.API.UnitTests.Commands.CreateOrder
             });
         }
 
-        [TestCase("CustomerName")]
+        [TestCase("OrderId")]
         [TestCase("AddressLine")]
         [TestCase("AddressName")]
         [TestCase("EirCode")]
         [TestCase("County")]
-        [TestCase("OrderItems")]
-        public async Task CreateOrderCommandValidatorContainsErrorMessageForRequiredFields(string field)
+        public async Task UpdateOrderAddressCommandValidatorContainsErrorMessageForRequiredFields(string field)
         {
-            var result = await new CreateOrderCommandValidator().ValidateAsync(new CreateOrderCommand());
+            var result = await new UpdateOrderAddressCommandValidator().ValidateAsync(new UpdateOrderAddressCommand());
 
             Assert.Multiple(() =>
             {
@@ -54,17 +43,15 @@ namespace OrderService.API.UnitTests.Commands.CreateOrder
             });
         }
 
-        [TestCase("CustomerName", 150)]
         [TestCase("AddressLine", 200)]
         [TestCase("AddressName", 50)]
         [TestCase("EirCode", 7)]
         [TestCase("County", 20)]
-        public async Task CreateOrderCommandValidatorContainsErrorMessageForExceedCharacters(string field, int maxLength)
+        public async Task UpdateOrderAddressCommandValidatorContainsErrorMessageForExceedCharacters(string field, int maxLength)
         {
-            var validator = new CreateOrderCommandValidator();
-            var command = new CreateOrderCommand()
+            var validator = new UpdateOrderAddressCommandValidator();
+            var command = new UpdateOrderAddressCommand()
             {
-                CustomerName = "CustomerNameCustomerNameCustomerNameCustomerNameCustomerNameCustomerNameCustomerNameCustomerNameCustomerNameCustomerNameCustomerNameCustomerNameCustomerNameCustomerNameCustomerNameCustomerName",
                 AddressLine = "AddressLineAddressLineAddressLineAddressLineAddressLineAddressLineAddressLineAddressLineAddressLineAAddressLineAddressLineAddressLineAddressLineAddressLineAddressLineAddressLineAddressLineAddressLineAddressLineAddressLineAddressLineAddressLineAddressLineddressLineAddressLineAddressLineAddressLineAddressLine",
                 AddressName = "AddressNameAddressNameAddressNameAddressNameAddressNameAddressNameAddressNameAddressNameAddressNameAddressNameAddressNameAddressNameAddressNameAddressName",
                 EirCode = "EirCodeEirCode",

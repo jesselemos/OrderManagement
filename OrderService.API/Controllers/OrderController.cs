@@ -7,6 +7,7 @@ using OrderService.API.Entities;
 using OrderService.API.Commands.UpdateOrderItems;
 using OrderService.API.Commands.CancelOrder;
 using OrderService.API.Commands.UpdateOrderAddress;
+using OrderService.API.Queries.GetOrderById;
 
 namespace OrderService.API.Controllers
 {

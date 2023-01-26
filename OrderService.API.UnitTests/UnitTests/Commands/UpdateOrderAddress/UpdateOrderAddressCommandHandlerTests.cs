@@ -2,9 +2,9 @@ using AutoMapper;
 using NSubstitute;
 using OrderService.API.Commands.UpdateOrderAddress;
 using OrderService.API.Repositories;
-using OrderService.API.UnitTests.Helpers;
+using OrderService.API.Tests.UnitTests.Helpers;
 
-namespace OrderService.API.UnitTests.Commands.UpdateOrderAddress
+namespace OrderService.API.Tests.UnitTests.Commands.UpdateOrderAddress
 {
     [TestFixture]
     public class UpdateOrderAddressCommandHandlerTests
@@ -17,7 +17,7 @@ namespace OrderService.API.UnitTests.Commands.UpdateOrderAddress
         {
             _mapper = AutoMapperHelper.CreateMapper();
             _orderRepository = new OrderRepository(DatabaseHelper.GetOrderDbContext());
-         }
+        }
 
         [Test]
         public async Task CanUpdateOrderAddressAndSetStatusCreated()

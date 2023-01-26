@@ -2,7 +2,7 @@
 using OrderService.API.Entities;
 using OrderService.API.Repositories;
 
-namespace OrderService.API.Queries.GetOrders
+namespace OrderService.API.Queries.GetOrderById
 {
     public class GetOrderByIdHandler : IRequestHandler<GetOrderByIdQuery, Order?>
     {

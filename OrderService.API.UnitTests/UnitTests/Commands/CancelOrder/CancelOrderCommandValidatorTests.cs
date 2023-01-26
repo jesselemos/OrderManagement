@@ -1,6 +1,6 @@
 ﻿using OrderService.API.Commands.CancelOrder;
 
-namespace OrderService.API.UnitTests.Commands.CancelOrder
+namespace OrderService.API.Tests.UnitTests.Commands.CancelOrder
 {
     [TestFixture]
     public class CancelOrderCommandValidatorTests

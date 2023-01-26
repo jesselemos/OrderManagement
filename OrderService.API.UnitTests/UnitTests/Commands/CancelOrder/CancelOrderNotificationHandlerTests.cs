@@ -1,12 +1,12 @@
 using NSubstitute;
-using OrderService.API.Commands.UpdateOrderItems;
+using OrderService.API.Commands.CancelOrder;
 using OrderService.API.Repositories;
-using OrderService.API.UnitTests.Helpers;
+using OrderService.API.Tests.UnitTests.Helpers;
 
-namespace OrderService.API.UnitTests.Commands.UpdateOrderItems
+namespace OrderService.API.Tests.UnitTests.Commands.CancelOrder
 {
     [TestFixture]
-    public class UpdateOrderItemsNotificationHandlerTests
+    public class CancelOrderNotificationHandlerTests
     {
         private IOrderRepository _orderRepository;
         private IProductRepository _productRepository;
@@ -20,14 +20,14 @@ namespace OrderService.API.UnitTests.Commands.UpdateOrderItems
         }
 
         [Test]
-        public async Task CanUpdateOrderItemsNotificationAndProductStockIsDecreased()
+        public async Task CanCancelOrderNotificationAndProductStockIsDecreased()
         {
             var productId = DatabaseHelper.ProductSeedId;
             var product = await _productRepository.GetProductByIdAsync(productId);
             var oldStock = product?.Stock;
-            await new UpdateOrderItemsNotificationHandler(_orderRepository, _productRepository).Handle(
-                new UpdateOrderItemsNotification
-                (new UpdateOrderItemsCommand()
+            await new CancelOrderNotificationHandler(_orderRepository, _productRepository).Handle(
+                new CancelOrderNotification
+                (new CancelOrderCommand()
                 {
                     OrderId = DatabaseHelper.OrderSeedId,
                 }), new CancellationToken());
@@ -41,13 +41,13 @@ namespace OrderService.API.UnitTests.Commands.UpdateOrderItems
         [Test]
         public void ThrowExceptionIfOrderNotExistsInDatabase()
         {
-            var handler = new UpdateOrderItemsNotificationHandler(_orderRepository, Substitute.For<IProductRepository>());
+            var handler = new CancelOrderNotificationHandler(_orderRepository, Substitute.For<IProductRepository>());
             Guid orderId = new();
 
             Assert.That(async () =>
                 await handler.Handle(
-                    new UpdateOrderItemsNotification(
-                        new UpdateOrderItemsCommand()
+                    new CancelOrderNotification(
+                        new CancelOrderCommand()
                         {
                             OrderId = orderId,
                         }), new CancellationToken()),
