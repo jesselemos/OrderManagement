@@ -9,7 +9,7 @@ namespace OrderService.API.Commands.CreateOrder
             RuleFor(p => p.CustomerName)
                 .NotEmpty().WithMessage("{CustomerName} is required.")
                 .NotNull()
-                .MaximumLength(150).WithMessage("{CustomerName} must not exceed 215000 characters.");
+                .MaximumLength(150).WithMessage("{CustomerName} must not exceed 150 characters.");
 
             RuleFor(p => p.AddressLine)
                 .NotEmpty().WithMessage("{AddressLine} is required.")

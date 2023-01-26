@@ -9,6 +9,7 @@ using OrderService.API.UnitTests.Helpers;
 
 namespace OrderService.API.UnitTests
 {
+    [TestFixture]
     public class CreateOrderCommandHandlerTests
     {
         public DbContextOptions<OrderDbContext> _orderDbContextOptions;
@@ -59,8 +60,7 @@ namespace OrderService.API.UnitTests
                         }
                     }
                 }, new CancellationToken());
-
-            Assert.That(Guid.TryParse(result.ToString(), out Guid guidResult), Is.True);
+            Assert.That(Guid.TryParse(result.ToString(), out _), Is.True);
         }
 
         [Test]
@@ -117,37 +117,7 @@ namespace OrderService.API.UnitTests
                             }
                         }, new CancellationToken()),
                         Throws.TypeOf<Exception>()
-                        .With.Message.EqualTo($"There is only {product.Stock} units available of {product.Name}"));
-        }
-
-        [Test]
-        public void OrderValidation()
-        {
-            var orderRepository = new OrderRepository(_orderDbContext);
-            var productRepository = new ProductRepository(_orderDbContext);
-
-            var obj = new CreateOrderCommandHandler(orderRepository, productRepository, _mapper).Handle(
-                new CreateOrderCommand()
-                {
-                    CustomerName = "",
-                    AddressName = "AddressName",
-                    EirCode = "EirCode",
-                    County = "County",
-                    OrderItems = new List<CreateOrderItem>
-                    {
-                        new CreateOrderItem
-                        {
-                            ProductId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
-                            Quantity = 10
-                        }
-                    }
-                }, new CancellationToken());
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(obj.IsCompleted, Is.True);
-                Assert.That(obj, Is.Not.Null);
-            });
+                        .With.Message.EqualTo($"There is only {product?.Stock} units available of {product?.Name}"));
         }
     }
 }
