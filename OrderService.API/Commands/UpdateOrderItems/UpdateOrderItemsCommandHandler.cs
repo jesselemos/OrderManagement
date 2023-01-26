@@ -3,7 +3,6 @@ using MediatR;
 using OrderService.API.Entities;
 using OrderService.API.Exceptions;
 using OrderService.API.Repositories;
-using System.Collections.Generic;
 
 namespace OrderService.API.Commands.CreateOrder
 {

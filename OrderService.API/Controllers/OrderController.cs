@@ -46,6 +46,7 @@ namespace OrderService.API.Controllers
         public async Task<ActionResult> UpdateOrderItems([FromBody] UpdateOrderItemsCommand command)
         {
             await _mediator.Send(command);
+            //TODO::Send notification to update product inventory
             return NoContent();
         }
 
