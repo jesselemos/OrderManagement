@@ -17,7 +17,8 @@ certificate following the next steps:
 
 You are ready to run the application: `docker compose up`
 
-Based on this article: [https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-6.0](https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-6.0)
+Based on this article: 
+<a href="https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-6.0" target="_blank">https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-6.0</a>
 
 ## Running the application on Docker Desktop
 After created the self-signed certificate you need to follow the next steps in order to run the application:
@@ -31,7 +32,7 @@ If everything goes OK you will see in your screen information similar to this:
 ![Docker Compose Up](images/dockerComposeUp.png "Docker Compose Up")
 
 ***Congratulations*** The application is ready to go on this link
-https://localhost:5021/swagger/index.html
+<a href="https://localhost:5021/swagger/index.html" target="_blank">https://localhost:5021/swagger</a>
 
 If everything went OK you will see the Swagger Home UI as in the image below:
 ![Swagger Home](images/swaggerHome.png "Swagger Home")
@@ -43,7 +44,7 @@ You can test our APIs using swagger in this way:
 
 1- Open the base API URL and add */swagger* to it. For example if you are
 running the API locally your URL would be something like:
-*https://localhost:5021/swagger/index.html*.
+*<a href="https://localhost:5021/swagger/index.html" target="_blank">https://localhost:5021/swagger</a>*.
 
 2 - A list of API should be shown. Choose the Endpoint you want to test and
 click on the *Arrow pointing down* to expand the specifics of that Endpoint.
