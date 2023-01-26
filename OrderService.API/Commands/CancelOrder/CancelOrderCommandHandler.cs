@@ -1,17 +1,16 @@
 ﻿using AutoMapper;
 using MediatR;
 using OrderService.API.Entities;
-using OrderService.API.Exceptions;
 using OrderService.API.Repositories;
 
 namespace OrderService.API.Commands.CancelOrder
 {
-    public class CancelOrderCommandCommandHandler : IRequestHandler<CancelOrderCommand>
+    public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
 
-        public CancelOrderCommandCommandHandler(IOrderRepository orderRepository, IMapper mapper)
+        public CancelOrderCommandHandler(IOrderRepository orderRepository, IMapper mapper)
         {
             _orderRepository = orderRepository;
             _mapper = mapper;
@@ -22,7 +21,7 @@ namespace OrderService.API.Commands.CancelOrder
             var order = await _orderRepository.GetOrderByIdAsync(request.OrderId);
             if (order == null)
             {
-                throw new NotFoundException(nameof(Order), request.OrderId);
+                throw new Exception($"OrderId: {request.OrderId} not found in our database.");
             }
 
             _mapper.Map(request, order, typeof(CancelOrderCommand), typeof(Order));

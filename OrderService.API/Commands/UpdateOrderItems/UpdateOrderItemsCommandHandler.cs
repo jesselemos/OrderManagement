@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
 using OrderService.API.Entities;
-using OrderService.API.Exceptions;
 using OrderService.API.Repositories;
 
 namespace OrderService.API.Commands.UpdateOrderItems
@@ -21,10 +20,10 @@ namespace OrderService.API.Commands.UpdateOrderItems
 
         public async Task<Unit> Handle(UpdateOrderItemsCommand request, CancellationToken cancellationToken)
         {
-            var orderToUpdate = await _orderRepository.GetOrderByIdAsync(request.OrderId);
-            if (orderToUpdate == null)
+            var order = await _orderRepository.GetOrderByIdAsync(request.OrderId);
+            if (order == null)
             {
-                throw new NotFoundException(nameof(Order), request.OrderId);
+                throw new Exception($"OrderId: {request.OrderId} not found in our database.");
             }
 
             List<OrderItem> newItems = new();
@@ -34,7 +33,7 @@ namespace OrderService.API.Commands.UpdateOrderItems
                 var product = await _productRepository.GetProductByIdAsync(item.ProductId);
                 if (product == null)
                 {
-                    throw new Exception($"ProductId: {item.ProductId} not found in our database");
+                    throw new Exception($"ProductId: {item.ProductId} not found in our database.");
                 }
 
                 if (product.Stock < item.Quantity)
@@ -49,7 +48,7 @@ namespace OrderService.API.Commands.UpdateOrderItems
                 });
             }
 
-            await _orderRepository.UpdateOrderItemsAsync(orderToUpdate, newItems);
+            await _orderRepository.UpdateOrderItemsAsync(order, newItems);
 
             return Unit.Value;
         }

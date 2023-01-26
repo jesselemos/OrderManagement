@@ -20,7 +20,7 @@ namespace OrderService.API.UnitTests.Commands.CreateOrder
         [Test]
         public async Task CanCreateOrderNotificationAndProductStockIsDecreased()
         {
-            var productId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+            var productId = DatabaseHelper.ProductSeedId;
             var orderQuantity = 2;
             var product = await _productRepository.GetProductByIdAsync(productId);
             var oldStock = product?.Stock;
@@ -72,14 +72,14 @@ namespace OrderService.API.UnitTests.Commands.CreateOrder
                             }
                         }), new CancellationToken()),
                         Throws.TypeOf<Exception>()
-                        .With.Message.EqualTo($"ProductId: {productId} not found in our database"));
+                        .With.Message.EqualTo($"ProductId: {productId} not found in our database."));
         }
 
         [Test]
         public async Task ThrowExceptionIfThereIsNotEnoughStockForTheProductAsync()
         {
             var handler = new CreateOrderNotificationHandler(_productRepository);
-            var productId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+            var productId = DatabaseHelper.ProductSeedId;
             var product = await _productRepository.GetProductByIdAsync(productId);
 
             Assert.That(async () =>

@@ -1,6 +1,7 @@
 using AutoMapper;
 using NSubstitute;
 using OrderService.API.Commands.CreateOrder;
+using OrderService.API.Entities;
 using OrderService.API.Models;
 using OrderService.API.Repositories;
 using OrderService.API.UnitTests.Helpers;
@@ -24,7 +25,7 @@ namespace OrderService.API.UnitTests.Commands.CreateOrder
         }
 
         [Test]
-        public async Task CanCreateOrder()
+        public async Task CanCreateOrderAndSetStatusCreated()
         {
             var result = await new CreateOrderCommandHandler(_orderRepository, _productRepository, _mapper).Handle(
                 new CreateOrderCommand()
@@ -38,12 +39,20 @@ namespace OrderService.API.UnitTests.Commands.CreateOrder
                     {
                         new CreateOrderItem
                         {
-                            ProductId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                            ProductId = DatabaseHelper.ProductSeedId,
                             Quantity = 10
                         }
                     }
                 }, new CancellationToken());
-            Assert.That(Guid.TryParse(result.ToString(), out _), Is.True);
+
+            var order = await _orderRepository.GetOrderByIdAsync(DatabaseHelper.OrderSeedId);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(Guid.TryParse(result.ToString(), out _), Is.True);
+                Assert.That(order, Is.Not.Null);
+                Assert.That(order?.OrderStatus == OrderStatus.Created);
+            });
         }
 
         [Test]
@@ -71,14 +80,14 @@ namespace OrderService.API.UnitTests.Commands.CreateOrder
                         }
                     }, new CancellationToken()),
                         Throws.TypeOf<Exception>()
-                        .With.Message.EqualTo($"ProductId: {productId} not found in our database"));
+                        .With.Message.EqualTo($"ProductId: {productId} not found in our database."));
         }
 
         [Test]
         public async Task ThrowExceptionIfThereIsNotEnoughStockForTheProductAsync()
         {
             var commandHandler = new CreateOrderCommandHandler(_orderRepository, _productRepository, _mapper);
-            var productId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+            var productId = DatabaseHelper.ProductSeedId;
             var product = await _productRepository.GetProductByIdAsync(productId);
 
             Assert.That(async () =>

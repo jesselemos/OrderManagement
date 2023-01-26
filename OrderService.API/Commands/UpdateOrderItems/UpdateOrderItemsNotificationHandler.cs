@@ -1,6 +1,4 @@
 ﻿using MediatR;
-using OrderService.API.Entities;
-using OrderService.API.Exceptions;
 using OrderService.API.Repositories;
 
 namespace OrderService.API.Commands.UpdateOrderItems
@@ -21,7 +19,7 @@ namespace OrderService.API.Commands.UpdateOrderItems
             var order = await _orderRepository.GetOrderByIdAsync(notification.Order.OrderId);
             if (order == null)
             {
-                throw new NotFoundException(nameof(Order), notification.Order.OrderId);
+                throw new Exception($"OrderId: {notification.Order.OrderId} not found in our database.");
             }
 
             //returning product stock for removed items
@@ -32,7 +30,7 @@ namespace OrderService.API.Commands.UpdateOrderItems
                     var product = await _productRepository.GetProductByIdAsync(item.Product.Id);
                     if (product == null)
                     {
-                        throw new Exception($"ProductId: {item.Product.Id} not found in our database");
+                        throw new Exception($"ProductId: {item.Product.Id} not found in our database.");
                     }
 
                     product.Stock += item.Quantity;
@@ -47,7 +45,7 @@ namespace OrderService.API.Commands.UpdateOrderItems
                 var product = await _productRepository.GetProductByIdAsync(item.ProductId);
                 if (product == null)
                 {
-                    throw new Exception($"ProductId: {item.ProductId} not found in our database");
+                    throw new Exception($"ProductId: {item.ProductId} not found in our database.");
                 }
 
                 var oldStock = order.OrderItems.Single(c => c.Product.Id == item.ProductId).Quantity;

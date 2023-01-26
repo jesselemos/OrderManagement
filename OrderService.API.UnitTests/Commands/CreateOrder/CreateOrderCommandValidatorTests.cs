@@ -1,5 +1,6 @@
 ﻿using OrderService.API.Commands.CreateOrder;
 using OrderService.API.Models;
+using OrderService.API.UnitTests.Helpers;
 
 namespace OrderService.API.UnitTests.Commands.CreateOrder
 {
@@ -21,7 +22,7 @@ namespace OrderService.API.UnitTests.Commands.CreateOrder
                     {
                         new CreateOrderItem
                         {
-                            ProductId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                            ProductId = DatabaseHelper.ProductSeedId,
                             Quantity = 10
                         }
                     }

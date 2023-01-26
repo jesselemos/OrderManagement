@@ -1,6 +1,4 @@
 ﻿using MediatR;
-using OrderService.API.Entities;
-using OrderService.API.Exceptions;
 using OrderService.API.Repositories;
 
 namespace OrderService.API.Commands.CancelOrder
@@ -21,7 +19,7 @@ namespace OrderService.API.Commands.CancelOrder
             var order = await _orderRepository.GetOrderByIdAsync(notification.Order.OrderId);
             if (order == null)
             {
-                throw new NotFoundException(nameof(Order), notification.Order.OrderId);
+                throw new Exception($"OrderId: {notification.Order.OrderId} not found in our database.");
             }
 
             foreach (var item in order.OrderItems)

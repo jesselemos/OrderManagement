@@ -28,7 +28,7 @@ namespace OrderService.API.Commands.CreateOrder
                 var product = await _productRepository.GetProductByIdAsync(item.ProductId);
                 if (product == null)
                 {
-                    throw new Exception($"ProductId: {item.ProductId} not found in our database");
+                    throw new Exception($"ProductId: {item.ProductId} not found in our database.");
                 }
 
                 if (product.Stock < item.Quantity)
