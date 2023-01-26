@@ -21,8 +21,4 @@
     <ProjectReference Include="..\OrderService.API\OrderService.API.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Commands\UpdateOrderItems\" />
-  </ItemGroup>
-
 </Project>

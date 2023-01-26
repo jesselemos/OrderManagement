@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using OrderService.API.Entities;
 using OrderService.API.Repositories;
 
@@ -9,13 +8,11 @@ namespace OrderService.API.Commands.UpdateOrderItems
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IProductRepository _productRepository;
-        private readonly IMapper _mapper;
 
-        public UpdateOrderItemsCommandHandler(IOrderRepository orderRepository, IProductRepository productRepository, IMapper mapper)
+        public UpdateOrderItemsCommandHandler(IOrderRepository orderRepository, IProductRepository productRepository)
         {
             _orderRepository = orderRepository;
             _productRepository = productRepository;
-            _mapper = mapper;
         }
 
         public async Task<Unit> Handle(UpdateOrderItemsCommand request, CancellationToken cancellationToken)
