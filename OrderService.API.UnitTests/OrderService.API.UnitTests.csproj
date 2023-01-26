@@ -23,7 +23,6 @@
 
   <ItemGroup>
     <Folder Include="Commands\UpdateOrderItems\" />
-    <Folder Include="Commands\UpdateOrderAddress\" />
   </ItemGroup>
 
 </Project>
