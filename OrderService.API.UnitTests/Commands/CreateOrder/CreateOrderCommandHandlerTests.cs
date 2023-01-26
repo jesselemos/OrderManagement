@@ -1,19 +1,15 @@
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using NSubstitute;
 using OrderService.API.Commands.CreateOrder;
-using OrderService.API.Entities;
 using OrderService.API.Models;
 using OrderService.API.Repositories;
 using OrderService.API.UnitTests.Helpers;
 
-namespace OrderService.API.UnitTests
+namespace OrderService.API.UnitTests.Commands.CreateOrder
 {
     [TestFixture]
     public class CreateOrderCommandHandlerTests
     {
-        public DbContextOptions<OrderDbContext> _orderDbContextOptions;
-        private OrderDbContext _orderDbContext;
         private IOrderRepository _orderRepository;
         private IProductRepository _productRepository;
         private IMapper _mapper;
@@ -21,23 +17,10 @@ namespace OrderService.API.UnitTests
         [SetUp]
         public void Setup()
         {
-            _orderDbContextOptions = new DbContextOptionsBuilder<OrderDbContext>()
-                .UseInMemoryDatabase(databaseName: "OrderDb")
-                .EnableSensitiveDataLogging()
-                .Options;
-
-            _orderDbContext = new OrderDbContext(_orderDbContextOptions);
-
-            _orderDbContext.Database.EnsureDeleted();
-            _orderDbContext.Database.EnsureCreated();
-
-            _orderDbContext.Products.Add(new Product { Id = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"), Name = "Brownie", Price = 6, Stock = 10 });
-
-            _orderDbContext.SaveChangesAsync();
-
             _mapper = AutoMapperHelper.CreateMapper();
-            _orderRepository = new OrderRepository(_orderDbContext);
-            _productRepository = new ProductRepository(_orderDbContext);
+            var orderDbContext = DatabaseHelper.GetOrderDbContext();
+            _orderRepository = new OrderRepository(orderDbContext);
+            _productRepository = new ProductRepository(orderDbContext);
         }
 
         [Test]
@@ -69,7 +52,7 @@ namespace OrderService.API.UnitTests
             var commandHandler = new CreateOrderCommandHandler(_orderRepository, Substitute.For<IProductRepository>(), _mapper);
             Guid productId = new();
 
-            Assert.That(async () => 
+            Assert.That(async () =>
                 await commandHandler.Handle(
                     new CreateOrderCommand()
                     {

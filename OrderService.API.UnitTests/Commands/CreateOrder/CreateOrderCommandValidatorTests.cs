@@ -1,12 +1,11 @@
 ﻿using OrderService.API.Commands.CreateOrder;
 using OrderService.API.Models;
 
-namespace OrderService.API.UnitTests.Validators
+namespace OrderService.API.UnitTests.Commands.CreateOrder
 {
     [TestFixture]
     public class CreateOrderCommandValidatorTests
     {
-
         [Test]
         public async Task CreateOrderCommandValidatorIsValid()
         {
