@@ -25,6 +25,11 @@ namespace OrderService.API.Commands.CreateOrder
 
             foreach (var item in request.OrderItems)
             {
+                if(item.Quantity < 1)
+                {
+                    throw new Exception($"Quantity: {item.Quantity} should be greater than 0.");
+                }
+
                 var product = await _productRepository.GetProductByIdAsync(item.ProductId);
                 if (product == null)
                 {

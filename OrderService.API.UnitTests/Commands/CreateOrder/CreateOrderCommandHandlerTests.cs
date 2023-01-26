@@ -56,6 +56,35 @@ namespace OrderService.API.UnitTests.Commands.CreateOrder
         }
 
         [Test]
+        public void ThrowExceptionIfQuantityIsNotGreaterThanZero()
+        {
+            var commandHandler = new CreateOrderCommandHandler(Substitute.For<IOrderRepository>(), Substitute.For<IProductRepository>(), _mapper);
+            Guid productId = new();
+            var quantity = 0;
+
+            Assert.That(async () =>
+                await commandHandler.Handle(
+                    new CreateOrderCommand()
+                    {
+                        CustomerName = "Name",
+                        AddressLine = "AddressLine",
+                        AddressName = "AddressName",
+                        EirCode = "EirCode",
+                        County = "County",
+                        OrderItems = new List<CreateOrderItem>
+                        {
+                            new CreateOrderItem
+                            {
+                                ProductId = productId,
+                                Quantity = quantity
+                            }
+                        }
+                    }, new CancellationToken()),
+                        Throws.TypeOf<Exception>()
+                        .With.Message.EqualTo($"Quantity: {quantity} should be greater than 0."));
+        }
+
+        [Test]
         public void ThrowExceptionIfProductNotExistsInDatabase()
         {
             var commandHandler = new CreateOrderCommandHandler(_orderRepository, Substitute.For<IProductRepository>(), _mapper);
