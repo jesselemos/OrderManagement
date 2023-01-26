@@ -22,7 +22,8 @@ namespace OrderService.API.UnitTests.Helpers
             orderDbContext.Products.Add(new Product { Id = ProductSeedId, Name = "Brownie", Price = 6, Stock = 100 });
             orderDbContext.SaveChangesAsync();
 
-            var order = new Order()
+
+            orderDbContext.Orders.Add(new Order()
             {
                 Id = OrderSeedId,
                 CustomerName = "Name",
@@ -38,9 +39,34 @@ namespace OrderService.API.UnitTests.Helpers
                                 Quantity = 10,
                             }
                         }
-            };
+            });
+            orderDbContext.SaveChangesAsync();
 
-            orderDbContext.Orders.Add(order);
+            for (var i = 0; i < 100; i++)
+            {
+                orderDbContext.Orders.Add(new Order()
+                {
+                    CustomerName = "Name",
+                    AddressLine = "AddressLine",
+                    AddressName = "AddressName",
+                    EirCode = "EirCode",
+                    County = "County",
+                    OrderItems = new List<OrderItem>
+                        {
+                            new OrderItem
+                            {
+                                Product = new Product
+                                {
+                                    Name= "Name",
+                                    Price = 10,
+                                },
+                                Quantity = 10,
+                            }
+                        }
+                });
+                orderDbContext.SaveChangesAsync();
+            }
+
             orderDbContext.SaveChangesAsync();
 
             return orderDbContext;

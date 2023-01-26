@@ -1,16 +1,32 @@
+using OrderService.API.Queries.GetOrders;
+using OrderService.API.Repositories;
+using OrderService.API.UnitTests.Helpers;
+
 namespace OrderService.API.UnitTests.Queries
 {
-    public class Tests
+    [TestFixture]
+    public class GetOrdersHandlerTests
     {
+        private IOrderRepository _orderRepository;
+
         [SetUp]
         public void Setup()
         {
+            _orderRepository = new OrderRepository(DatabaseHelper.GetOrderDbContext());
         }
 
         [Test]
-        public void Test1()
+        public async Task GetOrderByIdHandlerReturnsCorrectQuantityPerPage()
         {
-            Assert.Pass();
+            var quantityToTake = 10;
+            var orders = await new GetOrdersHandler(_orderRepository).Handle(
+                new GetOrdersQuery(quantityToTake, 0), new CancellationToken());
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(orders.Any());
+                Assert.That(orders.Count, Is.EqualTo(quantityToTake));
+            });
         }
     }
 }
