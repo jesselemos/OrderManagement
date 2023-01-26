@@ -1,6 +1,6 @@
 # Order Management API
 This application is designed to run on a Docker environment over a HTTPS connection using a self-signed certificate.
-To create the self-signed certificate please follow the steps below:
+To create the self-signed SSL certificate please follow the steps below:
 
 ## Generating the local Self-Signed SSL Certificate
 To be able to run the application over HTTPS you must create a self-signed
@@ -17,11 +17,11 @@ certificate following the next steps:
 
 You are ready to run the application: `docker compose up`
 
-Based on this article: 
+Steps based on this article: 
 <a href="https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-6.0" target="_blank">https://docs.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-6.0</a>
 
 ## Running the application on Docker Desktop
-After created the self-signed certificate you need to follow the next steps in order to run the application:
+After created the self-signed SSL certificate you need to follow the next steps in order to run the application:
 - Navigate to the application base directory where the docker compose file is. In my case: `C:\Users\jesse\Documents\GitHub\OrderManagement`
 
 Execute the following command to run the application:
