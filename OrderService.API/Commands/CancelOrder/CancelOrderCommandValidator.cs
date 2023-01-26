@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace OrderService.API.Commands.CreateOrder
+namespace OrderService.API.Commands.CancelOrder
 {
     public class CancelOrderCommandValidator : AbstractValidator<CancelOrderCommand>
     {

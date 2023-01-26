@@ -4,7 +4,7 @@ using OrderService.API.Entities;
 using OrderService.API.Exceptions;
 using OrderService.API.Repositories;
 
-namespace OrderService.API.Commands.CreateOrder
+namespace OrderService.API.Commands.UpdateOrderItems
 {
     public class UpdateOrderItemsCommandHandler : IRequestHandler<UpdateOrderItemsCommand>
     {

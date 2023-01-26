@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace OrderService.API.Commands.CreateOrder
+namespace OrderService.API.Commands.UpdateOrderItems
 {
     public class UpdateOrderItemsCommandValidator : AbstractValidator<UpdateOrderItemsCommand>
     {

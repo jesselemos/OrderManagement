@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using OrderService.API.Queries.GetOrders;
 using OrderService.API.Entities;
+using OrderService.API.Commands.UpdateOrderItems;
+using OrderService.API.Commands.CancelOrder;
+using OrderService.API.Commands.UpdateOrderAddress;
 
 namespace OrderService.API.Controllers
 {
@@ -20,34 +23,34 @@ namespace OrderService.API.Controllers
 
         [HttpPost(Name = "CreateOrder")]
         [ProducesResponseType((int)HttpStatusCode.Created)]
-        public async Task<ActionResult<Guid>> CreateOrder([FromBody] CreateOrderCommand createOrderCommand)
+        public async Task<ActionResult<Guid>> CreateOrder([FromBody] CreateOrderCommand command)
         {
-            var createdOrder = await _mediator.Send(createOrderCommand);
+            var createdOrder = await _mediator.Send(command);
 
-            await _mediator.Publish(new CreateOrderNotification(createOrderCommand));
+            await _mediator.Publish(new CreateOrderNotification(command));
 
             return CreatedAtRoute("GetOrderById", new { id = createdOrder }, createdOrder);
         }
 
         [HttpPut("address", Name = "UpdateOrderAddress")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesDefaultResponseType]
+        [ProducesResponseType(typeof(Order), (int)HttpStatusCode.OK)]
         public async Task<ActionResult> UpdateOrderAddress([FromBody] UpdateOrderAddressCommand command)
         {
             await _mediator.Send(command);
-            return NoContent();
+            return Ok();
         }
 
         [HttpPut("items", Name = "UpdateOrderItems")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesDefaultResponseType]
+        [ProducesResponseType(typeof(Order), (int)HttpStatusCode.OK)]
         public async Task<ActionResult> UpdateOrderItems([FromBody] UpdateOrderItemsCommand command)
         {
             await _mediator.Send(command);
-            //TODO::Send notification to update product inventory
-            return NoContent();
+
+            await _mediator.Publish(new UpdateOrderItemsNotification(command));
+
+            return Ok();
         }
 
         [HttpDelete(Name = "CancelOrder")]
@@ -56,7 +59,9 @@ namespace OrderService.API.Controllers
         public async Task<IActionResult> CancelOrder([FromBody] CancelOrderCommand command)
         {
             await _mediator.Send(command);
-            //TODO::Send notification to update product inventory
+
+            await _mediator.Publish(new CancelOrderNotification(command));
+
             return Ok();
         }
 

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace OrderService.API.Commands.CreateOrder
+namespace OrderService.API.Commands.CancelOrder
 {
     public class CancelOrderCommand : IRequest
     {

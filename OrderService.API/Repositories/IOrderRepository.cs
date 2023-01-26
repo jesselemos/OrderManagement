@@ -9,6 +9,5 @@ namespace OrderService.API.Repositories
         public Task<Order?> GetOrderByIdAsync(Guid id);
         public Task UpdateOrderAsync(Order order);
         public Task UpdateOrderItemsAsync(Order order, List<OrderItem> newItems);
-        public Task EventOccuredAsync(Order order, string evt);
     }
 }

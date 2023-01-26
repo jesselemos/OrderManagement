@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using OrderService.API.Models;
 
-namespace OrderService.API.Commands.CreateOrder
+namespace OrderService.API.Commands.UpdateOrderItems
 {
     public class UpdateOrderItemsCommand : IRequest
     {

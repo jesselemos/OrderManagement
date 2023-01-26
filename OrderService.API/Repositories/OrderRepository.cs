@@ -77,12 +77,5 @@ namespace OrderService.API.Repositories
                 .Include("OrderItems.Product")
                 .SingleOrDefaultAsync(s => s.Id == id);
         }
-
-        public async Task EventOccuredAsync(Order order, string evt)
-        {
-            //TODO::Move to a product repository and update the product inventory
-            _orderDbContext.Orders.Single(p => p.Id == order.Id).CustomerName = $"{order.CustomerName} evt: {evt}";
-            await Task.CompletedTask;
-        }
     }
 }
