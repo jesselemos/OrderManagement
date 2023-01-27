@@ -22,7 +22,7 @@ namespace OrderService.API.Commands.UpdateOrderItems
                 order = await _orderRepository.GetOrderByIdAsync(notification.Order.OrderId);
                 if (order == null)
                 {
-                    throw new Exception($"OrderId: {notification.Order.OrderId} not found in our database.");
+                    throw new ArgumentNullException($"OrderId: {notification.Order.OrderId} not found in our database.");
                 }
             }
 

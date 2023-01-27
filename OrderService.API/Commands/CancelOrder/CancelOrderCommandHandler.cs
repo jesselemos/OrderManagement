@@ -21,7 +21,7 @@ namespace OrderService.API.Commands.CancelOrder
             var order = await _orderRepository.GetOrderByIdAsync(request.OrderId);
             if (order == null)
             {
-                throw new Exception($"OrderId: {request.OrderId} not found in our database.");
+                throw new ArgumentNullException($"OrderId: {request.OrderId} not found in our database.");
             }
 
             _mapper.Map(request, order, typeof(CancelOrderCommand), typeof(Order));

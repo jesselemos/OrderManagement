@@ -23,7 +23,7 @@ namespace OrderService.API.Tests.UnitTests.Commands.CancelOrder
         [Test]
         public async Task CanCancelOrderAndSetStatusCanceled()
         {
-            var result = await new CancelOrderCommandHandler(_orderRepository, _mapper).Handle(
+            await new CancelOrderCommandHandler(_orderRepository, _mapper).Handle(
                 new CancelOrderCommand()
                 {
                     OrderId = DatabaseHelper.OrderSeedId
@@ -34,7 +34,7 @@ namespace OrderService.API.Tests.UnitTests.Commands.CancelOrder
             Assert.Multiple(() =>
             {
                 Assert.That(order, Is.Not.Null);
-                Assert.That(order?.OrderStatus == OrderStatus.Canceled);
+                Assert.That(order?.OrderStatus, Is.EqualTo(OrderStatus.Canceled));
             });
         }
 
@@ -42,7 +42,7 @@ namespace OrderService.API.Tests.UnitTests.Commands.CancelOrder
         public void ThrowExceptionIfOrderNotExistsInDatabase()
         {
             var commandHandler = new CancelOrderCommandHandler(Substitute.For<IOrderRepository>(), _mapper);
-            Guid orderId = new();
+            var orderId = Guid.NewGuid();
 
             Assert.That(async () =>
                 await commandHandler.Handle(
@@ -50,8 +50,8 @@ namespace OrderService.API.Tests.UnitTests.Commands.CancelOrder
                     {
                         OrderId = orderId
                     }, new CancellationToken()),
-            Throws.TypeOf<Exception>()
-                        .With.Message.EqualTo($"OrderId: {orderId} not found in our database."));
+            Throws.TypeOf<ArgumentNullException>()
+                        .With.Message.Contains($"OrderId: {orderId} not found in our database."));
         }
     }
 }

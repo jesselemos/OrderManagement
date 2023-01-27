@@ -34,7 +34,7 @@ namespace OrderService.API.Tests.UnitTests.Queries
         public async Task GetOrderByIdHandlerReturnsNullWhenOrderIdIsInvalid()
         {
             var order = await new GetOrderByIdHandler(_orderRepository).Handle(
-                new GetOrderByIdQuery(Guid.NewGuid()), new CancellationToken()); ;
+                new GetOrderByIdQuery(Guid.NewGuid()), new CancellationToken());
 
             Assert.That(order, Is.Null);
         }

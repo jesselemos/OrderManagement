@@ -14,7 +14,6 @@ namespace OrderService.API.Mappers
         {
             CreateMap<CreateOrderCommand, Order>();
             CreateMap<CreateOrderItem, OrderItem>();
-
             CreateMap<UpdateOrderAddressCommand, Order>();
             CreateMap<UpdateOrderItemsCommand, Order>();
             CreateMap<CancelOrderCommand, Order>();

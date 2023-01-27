@@ -42,7 +42,7 @@ namespace OrderService.API.Tests.UnitTests.Commands.CancelOrder
         public void ThrowExceptionIfOrderNotExistsInDatabase()
         {
             var handler = new CancelOrderNotificationHandler(_orderRepository, Substitute.For<IProductRepository>());
-            Guid orderId = new();
+            var orderId = Guid.NewGuid();
 
             Assert.That(async () =>
                 await handler.Handle(
@@ -51,8 +51,8 @@ namespace OrderService.API.Tests.UnitTests.Commands.CancelOrder
                         {
                             OrderId = orderId,
                         }), new CancellationToken()),
-                        Throws.TypeOf<Exception>()
-                        .With.Message.EqualTo($"OrderId: {orderId} not found in our database."));
+                        Throws.TypeOf<ArgumentNullException>()
+                        .With.Message.Contains($"OrderId: {orderId} not found in our database."));
         }
 
         [Test]

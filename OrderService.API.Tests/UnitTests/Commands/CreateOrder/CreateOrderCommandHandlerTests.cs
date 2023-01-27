@@ -51,7 +51,7 @@ namespace OrderService.API.Tests.UnitTests.Commands.CreateOrder
             {
                 Assert.That(Guid.TryParse(result.ToString(), out _), Is.True);
                 Assert.That(order, Is.Not.Null);
-                Assert.That(order?.OrderStatus == OrderStatus.Created);
+                Assert.That(order?.OrderStatus, Is.EqualTo(OrderStatus.Created));
             });
         }
 
@@ -59,7 +59,7 @@ namespace OrderService.API.Tests.UnitTests.Commands.CreateOrder
         public void ThrowExceptionIfQuantityIsNotGreaterThanZero()
         {
             var commandHandler = new CreateOrderCommandHandler(Substitute.For<IOrderRepository>(), Substitute.For<IProductRepository>(), _mapper);
-            Guid productId = new();
+            var productId = Guid.NewGuid();
             var quantity = 0;
 
             Assert.That(async () =>
@@ -80,15 +80,15 @@ namespace OrderService.API.Tests.UnitTests.Commands.CreateOrder
                             }
                         }
                     }, new CancellationToken()),
-                        Throws.TypeOf<Exception>()
-                        .With.Message.EqualTo($"Quantity: {quantity} should be greater than 0."));
+                        Throws.TypeOf<ArgumentOutOfRangeException>()
+                        .With.Message.Contains($"Quantity: {quantity} should be greater than 0."));
         }
 
         [Test]
         public void ThrowExceptionIfProductNotExistsInDatabase()
         {
             var commandHandler = new CreateOrderCommandHandler(_orderRepository, Substitute.For<IProductRepository>(), _mapper);
-            Guid productId = new();
+            var productId = Guid.NewGuid();
 
             Assert.That(async () =>
                 await commandHandler.Handle(
@@ -108,8 +108,8 @@ namespace OrderService.API.Tests.UnitTests.Commands.CreateOrder
                             }
                         }
                     }, new CancellationToken()),
-                        Throws.TypeOf<Exception>()
-                        .With.Message.EqualTo($"ProductId: {productId} not found in our database."));
+                        Throws.TypeOf<ArgumentNullException>()
+                        .With.Message.Contains($"ProductId: {productId} not found in our database."));
         }
 
         [Test]
@@ -137,8 +137,8 @@ namespace OrderService.API.Tests.UnitTests.Commands.CreateOrder
                             }
                             }
                         }, new CancellationToken()),
-                        Throws.TypeOf<Exception>()
-                        .With.Message.EqualTo($"There is only {product?.Stock} units available of {product?.Name}"));
+                        Throws.TypeOf<ArgumentOutOfRangeException>()
+                        .With.Message.Contains($"There is only {product?.Stock} units available of {product?.Name}"));
         }
     }
 }

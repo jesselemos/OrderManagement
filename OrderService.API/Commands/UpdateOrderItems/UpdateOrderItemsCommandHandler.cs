@@ -21,7 +21,7 @@ namespace OrderService.API.Commands.UpdateOrderItems
             var order = await _orderRepository.GetOrderByIdAsync(request.OrderId);
             if (order == null)
             {
-                throw new Exception($"OrderId: {request.OrderId} not found in our database.");
+                throw new ArgumentNullException($"OrderId: {request.OrderId} not found in our database.");
             }
 
             var orderBeforeUpdate = order.DeepCopy();
@@ -33,12 +33,12 @@ namespace OrderService.API.Commands.UpdateOrderItems
                 var product = await _productRepository.GetProductByIdAsync(item.ProductId);
                 if (product == null)
                 {
-                    throw new Exception($"ProductId: {item.ProductId} not found in our database.");
+                    throw new ArgumentNullException($"ProductId: {item.ProductId} not found in our database.");
                 }
 
                 if (product.Stock < item.Quantity)
                 {
-                    throw new Exception($"There is only {product.Stock} units available of {product.Name}");
+                    throw new ArgumentOutOfRangeException($"There is only {product.Stock} units available of {product.Name}");
                 }
 
                 newItems.Add(new OrderItem

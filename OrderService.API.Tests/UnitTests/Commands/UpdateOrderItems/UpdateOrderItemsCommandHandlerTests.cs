@@ -23,7 +23,7 @@ namespace OrderService.API.Tests.UnitTests.Commands.UpdateOrderItems
         [Test]
         public async Task CanUpdateOrderItems()
         {
-            var result = await new UpdateOrderItemsCommandHandler(_orderRepository, _productRepository).Handle(
+            await new UpdateOrderItemsCommandHandler(_orderRepository, _productRepository).Handle(
                 new UpdateOrderItemsCommand()
                 {
                     OrderId = DatabaseHelper.OrderSeedId,
@@ -50,7 +50,7 @@ namespace OrderService.API.Tests.UnitTests.Commands.UpdateOrderItems
         public void ThrowExceptionIfOrderNotExistsInDatabase()
         {
             var commandHandler = new UpdateOrderItemsCommandHandler(Substitute.For<IOrderRepository>(), Substitute.For<IProductRepository>());
-            Guid orderId = new();
+            var orderId = Guid.NewGuid();
 
             Assert.That(async () =>
                 await commandHandler.Handle(
@@ -58,15 +58,15 @@ namespace OrderService.API.Tests.UnitTests.Commands.UpdateOrderItems
                     {
                         OrderId = orderId
                     }, new CancellationToken()),
-                        Throws.TypeOf<Exception>()
-                        .With.Message.EqualTo($"OrderId: {orderId} not found in our database."));
+                        Throws.TypeOf<ArgumentNullException>()
+                        .With.Message.Contains($"OrderId: {orderId} not found in our database."));
         }
 
         [Test]
         public void ThrowExceptionIfProductNotExistsInDatabase()
         {
             var commandHandler = new UpdateOrderItemsCommandHandler(_orderRepository, Substitute.For<IProductRepository>());
-            Guid productId = new();
+            var productId = Guid.NewGuid();
 
             Assert.That(async () =>
                 await commandHandler.Handle(
@@ -82,8 +82,8 @@ namespace OrderService.API.Tests.UnitTests.Commands.UpdateOrderItems
                             }
                         }
                     }, new CancellationToken()),
-                        Throws.TypeOf<Exception>()
-                        .With.Message.EqualTo($"ProductId: {productId} not found in our database."));
+                        Throws.TypeOf<ArgumentNullException>()
+                        .With.Message.Contains($"ProductId: {productId} not found in our database."));
         }
 
         [Test]
@@ -107,8 +107,8 @@ namespace OrderService.API.Tests.UnitTests.Commands.UpdateOrderItems
                                 }
                             }
                         }, new CancellationToken()),
-                        Throws.TypeOf<Exception>()
-                        .With.Message.EqualTo($"There is only {product?.Stock} units available of {product?.Name}"));
+                        Throws.TypeOf<ArgumentOutOfRangeException>()
+                        .With.Message.Contains($"There is only {product?.Stock} units available of {product?.Name}"));
         }
     }
 }

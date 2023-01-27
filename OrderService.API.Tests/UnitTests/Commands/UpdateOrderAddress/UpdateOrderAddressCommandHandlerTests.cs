@@ -22,7 +22,7 @@ namespace OrderService.API.Tests.UnitTests.Commands.UpdateOrderAddress
         [Test]
         public async Task CanUpdateOrderAddressAndSetStatusCreated()
         {
-            var result = await new UpdateOrderAddressCommandHandler(_orderRepository, _mapper).Handle(
+            await new UpdateOrderAddressCommandHandler(_orderRepository, _mapper).Handle(
                 new UpdateOrderAddressCommand()
                 {
                     OrderId = DatabaseHelper.OrderSeedId,
@@ -32,15 +32,15 @@ namespace OrderService.API.Tests.UnitTests.Commands.UpdateOrderAddress
                     County = "New County",
                 }, new CancellationToken());
 
-            var order = await _orderRepository.GetOrderByIdAsync(DatabaseHelper.OrderSeedId);
+            var order = await _orderRepository.GetOrderByIdAsync(DatabaseHelper.OrderSeedId) ?? new();
 
             Assert.Multiple(() =>
             {
                 Assert.That(order, Is.Not.Null);
-                Assert.That(order?.AddressLine == "New AddressLine");
-                Assert.That(order?.AddressName == "New AddressName");
-                Assert.That(order?.EirCode == "NewCode");
-                Assert.That(order?.County == "New County");
+                Assert.That(order.AddressLine, Is.EqualTo("New AddressLine"));
+                Assert.That(order.AddressName, Is.EqualTo("New AddressName"));
+                Assert.That(order.EirCode, Is.EqualTo("NewCode"));
+                Assert.That(order.County, Is.EqualTo("New County"));
             });
         }
 
@@ -48,7 +48,7 @@ namespace OrderService.API.Tests.UnitTests.Commands.UpdateOrderAddress
         public void ThrowExceptionIfOrderNotExistsInDatabase()
         {
             var commandHandler = new UpdateOrderAddressCommandHandler(Substitute.For<IOrderRepository>(), _mapper);
-            Guid orderId = new();
+            var orderId = Guid.NewGuid();
 
             Assert.That(async () =>
                 await commandHandler.Handle(
@@ -60,8 +60,8 @@ namespace OrderService.API.Tests.UnitTests.Commands.UpdateOrderAddress
                         EirCode = "EirCode",
                         County = "County",
                     }, new CancellationToken()),
-                        Throws.TypeOf<Exception>()
-                        .With.Message.EqualTo($"OrderId: {orderId} not found in our database."));
+                        Throws.TypeOf<ArgumentNullException>()
+                        .With.Message.Contains($"OrderId: {orderId} not found in our database."));
         }
     }
 }

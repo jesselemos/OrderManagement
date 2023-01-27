@@ -50,7 +50,7 @@ namespace OrderService.API.Tests.UnitTests.Commands.CreateOrder
         public void ThrowExceptionIfProductNotExistsInDatabase()
         {
             var handler = new CreateOrderNotificationHandler(Substitute.For<IProductRepository>());
-            Guid productId = new();
+            var productId = Guid.NewGuid();
 
             Assert.That(async () =>
                 await handler.Handle(
@@ -71,8 +71,8 @@ namespace OrderService.API.Tests.UnitTests.Commands.CreateOrder
                                 }
                             }
                         }), new CancellationToken()),
-                        Throws.TypeOf<Exception>()
-                        .With.Message.EqualTo($"ProductId: {productId} not found in our database."));
+                        Throws.TypeOf<ArgumentNullException>()
+                        .With.Message.Contains($"ProductId: {productId} not found in our database."));
         }
 
         [Test]
@@ -101,8 +101,8 @@ namespace OrderService.API.Tests.UnitTests.Commands.CreateOrder
                                     }
                                 }
                             }), new CancellationToken()),
-                        Throws.TypeOf<Exception>()
-                        .With.Message.EqualTo($"There is only {product?.Stock} units available of {product?.Name}"));
+                        Throws.TypeOf<ArgumentOutOfRangeException>()
+                        .With.Message.Contains($"There is only {product?.Stock} units available of {product?.Name}"));
         }
     }
 }

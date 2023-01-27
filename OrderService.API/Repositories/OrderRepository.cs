@@ -53,7 +53,7 @@ namespace OrderService.API.Repositories
 
             foreach (var newItem in newItems)
             {
-                var existingItem = order.OrderItems.Where(c => c.Product?.Id == newItem.Product?.Id).SingleOrDefault();
+                var existingItem = order.OrderItems.SingleOrDefault(c => c.Product?.Id == newItem.Product?.Id);
 
                 if (existingItem != null)
                 {

@@ -279,16 +279,12 @@ namespace OrderService.API.Tests.IntegrationTests
             var orderStub = GetCreateOrderCommandStub(DatabaseHelper.ProductSeedId);
             var content = new StringContent(JsonConvert.SerializeObject(orderStub), Encoding.UTF8, "application/json");
             var createdOrder = await _httpClient.PostAsync($"/api/v1/Order", content);
-            var receiveStream = await createdOrder.Content.ReadAsStreamAsync();
-            var readStream = new StreamReader(receiveStream, Encoding.UTF8);
-            var stringContent = readStream.ReadToEnd();
-            var createdOrderId = JsonConvert.DeserializeObject<Guid>(stringContent);
 
             // Act
             var result = await _httpClient.GetAsync($"/api/v1/Order/{take}/{skip}");
-            receiveStream = await result.Content.ReadAsStreamAsync();
-            readStream = new StreamReader(receiveStream, Encoding.UTF8);
-            stringContent = readStream.ReadToEnd();
+            var receiveStream = await result.Content.ReadAsStreamAsync();
+            var readStream = new StreamReader(receiveStream, Encoding.UTF8);
+            var stringContent = readStream.ReadToEnd();
             var returnedOrder = JsonConvert.DeserializeObject<List<Order>>(stringContent) ?? new();
 
             //assert
