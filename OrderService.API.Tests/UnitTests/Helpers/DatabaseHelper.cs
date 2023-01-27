@@ -22,7 +22,6 @@ namespace OrderService.API.Tests.UnitTests.Helpers
             orderDbContext.Products.Add(new Product { Id = ProductSeedId, Name = "Brownie", Price = 6, Stock = 100 });
             orderDbContext.SaveChangesAsync();
 
-
             orderDbContext.Orders.Add(new Order()
             {
                 Id = OrderSeedId,
