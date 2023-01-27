@@ -25,7 +25,7 @@ namespace OrderService.API.Commands.CreateOrder
 
             foreach (var item in request.OrderItems)
             {
-                if(item.Quantity < 1)
+                if (item.Quantity < 1)
                 {
                     throw new ArgumentOutOfRangeException($"Quantity: {item.Quantity} should be greater than 0.");
                 }

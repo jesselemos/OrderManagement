@@ -1,13 +1,13 @@
 using MediatR;
-using OrderService.API.Commands.CreateOrder;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
-using OrderService.API.Queries.GetOrders;
-using OrderService.API.Entities;
-using OrderService.API.Commands.UpdateOrderItems;
 using OrderService.API.Commands.CancelOrder;
+using OrderService.API.Commands.CreateOrder;
 using OrderService.API.Commands.UpdateOrderAddress;
+using OrderService.API.Commands.UpdateOrderItems;
+using OrderService.API.Entities;
 using OrderService.API.Queries.GetOrderById;
+using OrderService.API.Queries.GetOrders;
+using System.Net;
 
 namespace OrderService.API.Controllers
 {
