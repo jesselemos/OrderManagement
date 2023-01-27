@@ -1,11 +1,11 @@
-using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using OrderService.API.Behaviours;
 using OrderService.API.Repositories;
-using OrderService.API.Repositories.DataSeed;
 using System.Reflection;
+using FluentValidation;
+using OrderService.API.Behaviours;
+using Microsoft.EntityFrameworkCore;
+using OrderService.API.Repositories.DataSeed;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,4 +62,7 @@ app.MapControllers();
 
 app.Run();
 
+//This line is necessary for Integration Tests
+#pragma warning disable S1118 // Utility classes should not have public constructors
 public partial class Program { }
+#pragma warning restore S1118 // Utility classes should not have public constructors

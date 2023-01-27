@@ -80,7 +80,7 @@ namespace OrderService.API.Tests.UnitTests.Commands.CreateOrder
                             }
                         }
                     }, new CancellationToken()),
-                        Throws.TypeOf<ArgumentOutOfRangeException>()
+                        Throws.TypeOf<NotSupportedException>()
                         .With.Message.Contains($"Quantity: {quantity} should be greater than 0."));
         }
 

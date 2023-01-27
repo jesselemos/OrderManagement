@@ -27,7 +27,7 @@ namespace OrderService.API.Commands.CreateOrder
             {
                 if (item.Quantity < 1)
                 {
-                    throw new ArgumentOutOfRangeException($"Quantity: {item.Quantity} should be greater than 0.");
+                    throw new NotSupportedException($"Quantity: {item.Quantity} should be greater than 0.");
                 }
 
                 var product = await _productRepository.GetProductByIdAsync(item.ProductId);
