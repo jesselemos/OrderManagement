@@ -47,7 +47,7 @@ namespace OrderService.API.Controllers
         [ProducesResponseType(typeof(Order), (int)HttpStatusCode.OK)]
         public async Task<ActionResult> UpdateOrderItems([FromBody] UpdateOrderItemsCommand command)
         {
-            await _mediator.Send(command);
+            command.PreviousOrder = await _mediator.Send(command);
 
             await _mediator.Publish(new UpdateOrderItemsNotification(command));
 

@@ -49,7 +49,7 @@ namespace OrderService.API.Tests.UnitTests.Commands.UpdateOrderItems
                     new UpdateOrderItemsNotification(
                         new UpdateOrderItemsCommand()
                         {
-                            OrderId = orderId,
+                            OrderId = orderId
                         }), new CancellationToken()),
                         Throws.TypeOf<Exception>()
                         .With.Message.EqualTo($"OrderId: {orderId} not found in our database."));

@@ -10,7 +10,7 @@ certificate following the next steps:
 - `dotnet dev-certs https --clean`
 - ***WARNING:*** When clicking on YES you will delete the existing self-signed certificate, but you can create a new one any time following the steps below:
 ![Cleaning Certificates](images/cleaningCertificates.png "Cleaning Certificates")
-- `dotnet dev-certs https -ep $env:USERPROFILE\.aspnet\https\execution.pfx -p password1`
+- `dotnet dev-certs https -ep $env:USERPROFILE\.aspnet\https\aspnetapp.pfx -p certPassword`
 - `dotnet dev-certs https --trust`
 - Click Yes on the new window that opened to trust the new certificate
 ![Trusting Certificates](images/trustingCertificate.png "Trusting Certificates")

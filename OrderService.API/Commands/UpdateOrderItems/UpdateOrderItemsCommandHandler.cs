@@ -1,10 +1,11 @@
 ﻿using MediatR;
 using OrderService.API.Entities;
+using OrderService.API.Extensions;
 using OrderService.API.Repositories;
 
 namespace OrderService.API.Commands.UpdateOrderItems
 {
-    public class UpdateOrderItemsCommandHandler : IRequestHandler<UpdateOrderItemsCommand>
+    public class UpdateOrderItemsCommandHandler : IRequestHandler<UpdateOrderItemsCommand, Order>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IProductRepository _productRepository;
@@ -15,13 +16,15 @@ namespace OrderService.API.Commands.UpdateOrderItems
             _productRepository = productRepository;
         }
 
-        public async Task<Unit> Handle(UpdateOrderItemsCommand request, CancellationToken cancellationToken)
+        public async Task<Order> Handle(UpdateOrderItemsCommand request, CancellationToken cancellationToken)
         {
             var order = await _orderRepository.GetOrderByIdAsync(request.OrderId);
             if (order == null)
             {
                 throw new Exception($"OrderId: {request.OrderId} not found in our database.");
             }
+
+            var orderBeforeUpdate = order.DeepCopy();
 
             List<OrderItem> newItems = new();
 
@@ -47,7 +50,7 @@ namespace OrderService.API.Commands.UpdateOrderItems
 
             await _orderRepository.UpdateOrderItemsAsync(order, newItems);
 
-            return Unit.Value;
+            return orderBeforeUpdate;
         }
     }
 }

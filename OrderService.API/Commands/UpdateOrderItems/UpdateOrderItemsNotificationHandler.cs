@@ -16,10 +16,15 @@ namespace OrderService.API.Commands.UpdateOrderItems
 
         public async Task Handle(UpdateOrderItemsNotification notification, CancellationToken cancellationToken)
         {
-            var order = await _orderRepository.GetOrderByIdAsync(notification.Order.OrderId);
+            //todo unit tests with invalid products
+            var order = notification.Order.PreviousOrder;
             if (order == null)
             {
-                throw new Exception($"OrderId: {notification.Order.OrderId} not found in our database.");
+                order = await _orderRepository.GetOrderByIdAsync(notification.Order.OrderId);
+                if (order == null)
+                {
+                    throw new Exception($"OrderId: {notification.Order.OrderId} not found in our database.");
+                }
             }
 
             //returning product stock for removed items
@@ -39,7 +44,7 @@ namespace OrderService.API.Commands.UpdateOrderItems
                 }
             }
 
-            //decreasing product stock for existing items
+            //updating product stock for changed and new items
             foreach (var item in notification.Order.OrderItems)
             {
                 var product = await _productRepository.GetProductByIdAsync(item.ProductId);
@@ -48,9 +53,17 @@ namespace OrderService.API.Commands.UpdateOrderItems
                     throw new Exception($"ProductId: {item.ProductId} not found in our database.");
                 }
 
-                var oldStock = order.OrderItems.Single(c => c.Product.Id == item.ProductId).Quantity;
+                var oldStock = order.OrderItems.SingleOrDefault(c => c.Product.Id == item.ProductId)?.Quantity;
 
-                product.Stock += oldStock - item.Quantity;
+                //Item Changed
+                if (oldStock.HasValue)
+                {
+                    product.Stock += oldStock.Value - item.Quantity;
+                }
+                else //New Item Added
+                {
+                    product.Stock -= item.Quantity;
+                }
 
                 await _productRepository.UpdateProductAsync(product);
             }
