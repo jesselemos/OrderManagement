@@ -4,7 +4,7 @@ namespace OrderService.API.Repositories
 {
     public interface IOrderRepository
     {
-        public Task<IEnumerable<Order>> GetAllOrdersAsync(int take = 10, int skip = 0);
+        public Task<IEnumerable<Order>> GetAllOrdersAsync(int take, int skip);
         public Task CreateOrderAsync(Order order);
         public Task<Order?> GetOrderByIdAsync(Guid id);
         public Task UpdateOrderAsync(Order order);

@@ -4,7 +4,7 @@
     {
         public Order()
         {
-            Id = new();
+            Id = Guid.NewGuid();
         }
         public string OrderStatus { get; set; } = Entities.OrderStatus.Created;
         public string? CustomerName { get; set; }

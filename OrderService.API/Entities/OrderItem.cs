@@ -4,7 +4,7 @@
     {
         public OrderItem()
         {
-            Id = new();
+            Id = Guid.Empty;
         }
 
         public Product Product { get; set; } = new();

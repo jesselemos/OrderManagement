@@ -5,7 +5,7 @@ using OrderService.API.Repositories;
 
 namespace OrderService.API.Commands.UpdateOrderItems
 {
-    public class UpdateOrderItemsCommandHandler : IRequestHandler<UpdateOrderItemsCommand, Order>
+    public class UpdateOrderItemsCommandHandler : IRequestHandler<UpdateOrderItemsCommand, Order?>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IProductRepository _productRepository;
@@ -16,7 +16,7 @@ namespace OrderService.API.Commands.UpdateOrderItems
             _productRepository = productRepository;
         }
 
-        public async Task<Order> Handle(UpdateOrderItemsCommand request, CancellationToken cancellationToken)
+        public async Task<Order?> Handle(UpdateOrderItemsCommand request, CancellationToken cancellationToken)
         {
             var order = await _orderRepository.GetOrderByIdAsync(request.OrderId);
             if (order == null)
