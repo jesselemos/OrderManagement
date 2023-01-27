@@ -54,7 +54,7 @@ namespace OrderService.API.Controllers
             return Ok();
         }
 
-        [HttpDelete(Name = "CancelOrder")]
+        [HttpPut("cancel", Name = "CancelOrder")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(Order), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> CancelOrder([FromBody] CancelOrderCommand command)
