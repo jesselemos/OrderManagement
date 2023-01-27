@@ -16,7 +16,6 @@ namespace OrderService.API.Commands.UpdateOrderItems
 
         public async Task Handle(UpdateOrderItemsNotification notification, CancellationToken cancellationToken)
         {
-            //todo unit tests with invalid products
             var order = notification.Order.PreviousOrder;
             if (order == null)
             {
@@ -35,7 +34,7 @@ namespace OrderService.API.Commands.UpdateOrderItems
                     var product = await _productRepository.GetProductByIdAsync(item.Product.Id);
                     if (product == null)
                     {
-                        throw new Exception($"ProductId: {item.Product.Id} not found in our database.");
+                        continue;
                     }
 
                     product.Stock += item.Quantity;
@@ -50,7 +49,7 @@ namespace OrderService.API.Commands.UpdateOrderItems
                 var product = await _productRepository.GetProductByIdAsync(item.ProductId);
                 if (product == null)
                 {
-                    throw new Exception($"ProductId: {item.ProductId} not found in our database.");
+                    continue;
                 }
 
                 var oldStock = order.OrderItems.SingleOrDefault(c => c.Product.Id == item.ProductId)?.Quantity;

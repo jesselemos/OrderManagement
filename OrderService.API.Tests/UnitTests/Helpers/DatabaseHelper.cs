@@ -21,7 +21,10 @@ namespace OrderService.API.Tests.UnitTests.Helpers
             orderDbContext.Database.EnsureDeleted();
             orderDbContext.Database.EnsureCreated();
 
-            orderDbContext.Products.Add(new Product { Id = ProductSeedId, Name = "Brownie", Price = 6, Stock = 100 });
+            orderDbContext.Products.Add(new Product { Name = "Coffee", Price = 4, Stock = 1000 });
+            orderDbContext.Products.Add(new Product { Id = ProductSeedId, Name = "Brownie", Price = 6, Stock = 1000 });
+            orderDbContext.Products.Add(new Product { Id = ProductTwoSeedId, Name = "Water", Price = 2, Stock = 2000 });
+            orderDbContext.Products.Add(new Product { Id = ProductThreeSeedId, Name = "Orange Juice", Price = 3, Stock = 3000 });
             orderDbContext.SaveChangesAsync();
 
             orderDbContext.Orders.Add(new Order()
@@ -36,9 +39,19 @@ namespace OrderService.API.Tests.UnitTests.Helpers
                         {
                             new OrderItem
                             {
-                                Product = orderDbContext.Products.First(),
+                                Product = orderDbContext.Products.Single(s => s.Id == ProductSeedId),
                                 Quantity = 10,
-                            }
+                            },
+                            new OrderItem
+                            {
+                                Product = orderDbContext.Products.Single(s => s.Id == ProductTwoSeedId),
+                                Quantity = 10,
+                            },
+                            new OrderItem
+                            {
+                                Product = orderDbContext.Products.Single(s => s.Id == ProductThreeSeedId),
+                                Quantity = 10,
+                            },
                         }
             });
             orderDbContext.SaveChangesAsync();

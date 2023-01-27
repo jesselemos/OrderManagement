@@ -1,5 +1,6 @@
 using NSubstitute;
 using OrderService.API.Commands.UpdateOrderItems;
+using OrderService.API.Models;
 using OrderService.API.Repositories;
 using OrderService.API.Tests.UnitTests.Helpers;
 
@@ -53,6 +54,30 @@ namespace OrderService.API.Tests.UnitTests.Commands.UpdateOrderItems
                         }), new CancellationToken()),
                         Throws.TypeOf<Exception>()
                         .With.Message.EqualTo($"OrderId: {orderId} not found in our database."));
+        }
+
+        [Test]
+        public void DoesNotThrowExceptionIfProductDoesNotExistsInDatabaseToUpdateTheOtherItems()
+        {
+            var handler = new UpdateOrderItemsNotificationHandler(_orderRepository, Substitute.For<IProductRepository>());
+
+            Assert.That(async () =>
+                await handler.Handle(
+                    new UpdateOrderItemsNotification(
+                        new UpdateOrderItemsCommand()
+                        {
+                            OrderId = DatabaseHelper.OrderSeedId,
+                            OrderItems = new List<CreateOrderItem>
+                            {
+                                new CreateOrderItem
+                                {
+                                    ProductId = Guid.Empty,
+                                    Quantity = 1
+                                }
+                            }
+
+                        }), new CancellationToken()),
+                        Throws.Nothing);
         }
     }
 }

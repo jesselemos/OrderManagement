@@ -97,7 +97,7 @@ namespace OrderService.API.Tests.UnitTests.Commands.CreateOrder
                                     new CreateOrderItem
                                     {
                                         ProductId = productId,
-                                        Quantity = 999
+                                        Quantity = 999999999
                                     }
                                 }
                             }), new CancellationToken()),

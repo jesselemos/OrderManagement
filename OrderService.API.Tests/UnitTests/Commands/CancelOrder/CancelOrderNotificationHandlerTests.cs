@@ -56,7 +56,7 @@ namespace OrderService.API.Tests.UnitTests.Commands.CancelOrder
         }
 
         [Test]
-        public void ThrowExceptionIfProductNotExistsInDatabase()
+        public void DoesNotThrowExceptionIfProductDoesNotExistsInDatabaseToUpdateTheOtherItems()
         {
             var handler = new CancelOrderNotificationHandler(_orderRepository, Substitute.For<IProductRepository>());
 
@@ -67,8 +67,7 @@ namespace OrderService.API.Tests.UnitTests.Commands.CancelOrder
                         {
                             OrderId = DatabaseHelper.OrderSeedId,
                         }), new CancellationToken()),
-                        Throws.TypeOf<Exception>()
-                        .With.Message.EqualTo($"ProductId: {DatabaseHelper.ProductSeedId} not found in our database."));
+                        Throws.Nothing);
         }
     }
 }

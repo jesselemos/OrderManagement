@@ -99,7 +99,7 @@ namespace OrderService.API.Tests.IntegrationTests
             receiveStream = await getOrderResult.Content.ReadAsStreamAsync();
             readStream = new StreamReader(receiveStream, Encoding.UTF8);
             stringContent = readStream.ReadToEnd();
-            var returnedOrder = JsonConvert.DeserializeObject<Order>(stringContent);
+            var returnedOrder = JsonConvert.DeserializeObject<Order>(stringContent) ?? new();
 
             Assert.Multiple(() =>
             {
@@ -139,7 +139,7 @@ namespace OrderService.API.Tests.IntegrationTests
             receiveStream = await getOrderResult.Content.ReadAsStreamAsync();
             readStream = new StreamReader(receiveStream, Encoding.UTF8);
             stringContent = readStream.ReadToEnd();
-            var returnedOrder = JsonConvert.DeserializeObject<Order>(stringContent);
+            var returnedOrder = JsonConvert.DeserializeObject<Order>(stringContent) ?? new();
 
             Assert.Multiple(() =>
             {
@@ -213,15 +213,32 @@ namespace OrderService.API.Tests.IntegrationTests
             receiveStream = await getOrderResult.Content.ReadAsStreamAsync();
             readStream = new StreamReader(receiveStream, Encoding.UTF8);
             stringContent = readStream.ReadToEnd();
-            var returnedOrder = JsonConvert.DeserializeObject<Order>(stringContent);
+            var returnedOrder = JsonConvert.DeserializeObject<Order>(stringContent) ?? new();
 
             Assert.Multiple(() =>
             {
                 Assert.That(updateItemsResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-                Assert.That(returnedOrder.OrderItems.Count, Is.EqualTo(2));
+                Assert.That(returnedOrder.OrderItems, Has.Count.EqualTo(2));
                 Assert.That(!returnedOrder.OrderItems.Any(f => f.Product.Id == productId));
                 Assert.That(returnedOrder.OrderItems.Single(f => f.Product.Id == productTwoId).Quantity, Is.EqualTo(productTwoNewQuantity));
                 Assert.That(returnedOrder.OrderItems.Single(f => f.Product.Id == productThreeId).Quantity, Is.EqualTo(productQuantityToOrder));
+            });
+        }
+
+        [Test]
+        public async Task CreateOrderWithInvalidRequestReturnsValidationErrors()
+        {
+            //Arrange
+            var orderStub = new CreateOrderCommand();
+            var content = new StringContent(JsonConvert.SerializeObject(orderStub), Encoding.UTF8, "application/json");
+
+            // Act
+            var result = await _httpClient.PostAsync($"/api/v1/order", content);
+
+            //assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.StatusCode, Is.Not.EqualTo(HttpStatusCode.OK));
             });
         }
 
@@ -242,7 +259,7 @@ namespace OrderService.API.Tests.IntegrationTests
             receiveStream = await result.Content.ReadAsStreamAsync();
             readStream = new StreamReader(receiveStream, Encoding.UTF8);
             stringContent = readStream.ReadToEnd();
-            var returnedOrder = JsonConvert.DeserializeObject<Order>(stringContent);
+            var returnedOrder = JsonConvert.DeserializeObject<Order>(stringContent)??new();
 
             //assert
             Assert.Multiple(() =>
@@ -253,7 +270,6 @@ namespace OrderService.API.Tests.IntegrationTests
                 Assert.That(returnedOrder.Total, Is.EqualTo(60));
             });
         }
-
 
         [Test]
         public async Task GetOrdersReturnsPaginatedOrders()
@@ -274,7 +290,7 @@ namespace OrderService.API.Tests.IntegrationTests
             receiveStream = await result.Content.ReadAsStreamAsync();
             readStream = new StreamReader(receiveStream, Encoding.UTF8);
             stringContent = readStream.ReadToEnd();
-            var returnedOrder = JsonConvert.DeserializeObject<List<Order>>(stringContent);
+            var returnedOrder = JsonConvert.DeserializeObject<List<Order>>(stringContent) ?? new();
 
             //assert
             Assert.Multiple(() =>
@@ -285,7 +301,7 @@ namespace OrderService.API.Tests.IntegrationTests
             });
         }
 
-        private CreateOrderCommand GetCreateOrderCommandStub(Guid productId, int quantity = 10)
+        private static CreateOrderCommand GetCreateOrderCommandStub(Guid productId, int quantity = 10)
         {
             return new CreateOrderCommand()
             {

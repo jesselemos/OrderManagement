@@ -27,7 +27,7 @@ namespace OrderService.API.Commands.CancelOrder
                 var product = await _productRepository.GetProductByIdAsync(item.Product.Id);
                 if (product == null)
                 {
-                    throw new Exception($"ProductId: {item.Product.Id} not found in our database.");
+                    continue;
                 }
 
                 product.Stock += item.Quantity;
