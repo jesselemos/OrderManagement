@@ -24,11 +24,10 @@ namespace OrderService.API.Commands.CancelOrder
 
             foreach (var item in order.OrderItems)
             {
-                //todo cover condition with unit tests
                 var product = await _productRepository.GetProductByIdAsync(item.Product.Id);
                 if (product == null)
                 {
-                    continue;
+                    throw new Exception($"ProductId: {item.Product.Id} not found in our database.");
                 }
 
                 product.Stock += item.Quantity;

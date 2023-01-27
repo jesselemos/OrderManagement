@@ -54,5 +54,21 @@ namespace OrderService.API.Tests.UnitTests.Commands.CancelOrder
                         Throws.TypeOf<Exception>()
                         .With.Message.EqualTo($"OrderId: {orderId} not found in our database."));
         }
+
+        [Test]
+        public void ThrowExceptionIfProductNotExistsInDatabase()
+        {
+            var handler = new CancelOrderNotificationHandler(_orderRepository, Substitute.For<IProductRepository>());
+
+            Assert.That(async () =>
+                await handler.Handle(
+                    new CancelOrderNotification(
+                        new CancelOrderCommand()
+                        {
+                            OrderId = DatabaseHelper.OrderSeedId,
+                        }), new CancellationToken()),
+                        Throws.TypeOf<Exception>()
+                        .With.Message.EqualTo($"ProductId: {DatabaseHelper.ProductSeedId} not found in our database."));
+        }
     }
 }
