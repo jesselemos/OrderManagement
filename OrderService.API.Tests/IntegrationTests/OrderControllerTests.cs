@@ -10,7 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using OrderService.API.Entities;
 using OrderService.API.Commands.CancelOrder;
 using OrderService.API.Commands.UpdateOrderAddress;
-using Microsoft.AspNetCore.Mvc.TagHelpers.Cache;
 using OrderService.API.Commands.UpdateOrderItems;
 
 namespace OrderService.API.Tests.IntegrationTests
