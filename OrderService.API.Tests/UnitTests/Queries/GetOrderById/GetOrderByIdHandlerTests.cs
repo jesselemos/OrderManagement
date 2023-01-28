@@ -2,7 +2,7 @@ using OrderService.API.Queries.GetOrderById;
 using OrderService.API.Repositories;
 using OrderService.API.Tests.UnitTests.Helpers;
 
-namespace OrderService.API.Tests.UnitTests.Queries
+namespace OrderService.API.Tests.UnitTests.Queries.GetOrderById
 {
     [TestFixture]
     public class GetOrderByIdHandlerTests
