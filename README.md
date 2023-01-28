@@ -30,6 +30,9 @@ After created the self-signed SSL certificate you need to follow the next steps 
 
 ###  ***Congratulations*** The application is ready to go on this link: <a href="https://localhost:5021/swagger/index.html" target="_blank">https://localhost:5021/swagger</a>
 
+***You can check if the Database Context is healthy accessing:*** 
+<a href="https://localhost:5021/health" target="_blank">https://localhost:5021/health</a> You should see the message: ***Healthy***
+
 
 >If everything went OK you will see the Swagger Home UI as in the image below:
 >![Swagger Home](images/swaggerHome.png "Swagger Home")

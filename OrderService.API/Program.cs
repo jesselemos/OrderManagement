@@ -19,7 +19,7 @@ builder.Services.AddDbContext<OrderDbContext>(opt =>
 opt.UseInMemoryDatabase("OrderDb")
 .EnableSensitiveDataLogging());
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
-
+builder.Services.AddHealthChecks().AddDbContextCheck<OrderDbContext>();
 
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
@@ -54,6 +54,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseHealthChecks("/health");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
