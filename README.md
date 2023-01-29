@@ -52,7 +52,7 @@ click on the *Arrow pointing down* to expand the specifics of that Endpoint.
 click on *Execute*. After that you should see the results.
 
 # Code Quality
-Using the <a href="https://marketplace.visualstudio.com/items?itemName=FortuneNgwenya.FineCodeCoverage" target="_blank">Visual Studio Extension ***Fine Code Coverage***</a> as a reference, it was possible to achieve 100% ***Unit Tests*** + ***Integration Tests*** code coverage. This increases the quality of the product with less chance of unexpected behaviours.
+Using the <a href="https://marketplace.visualstudio.com/items?itemName=FortuneNgwenya.FineCodeCoverage" target="_blank">Visual Studio Extension ***Fine Code Coverage***</a> as a reference, it was possible to achieve 100% ***Unit Tests*** + ***Integration Tests*** of line code coverage. This increases the quality of the product with less chance of unexpected behaviours.
 ![Swagger Home](images/fineCodeCoverage.png "Swagger Home")
 
 # Notes
