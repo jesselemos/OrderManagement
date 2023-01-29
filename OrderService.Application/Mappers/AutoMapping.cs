@@ -18,5 +18,13 @@ namespace OrderService.Application.Mappers
             CreateMap<UpdateOrderItemsCommand, Order>();
             CreateMap<CancelOrderCommand, Order>();
         }
+
+        public static IMapper CreateMapper()
+        {
+            return new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<AutoMapping>();
+            }).CreateMapper();
+        }
     }
 }

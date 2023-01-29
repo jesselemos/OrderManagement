@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using NUnit.Framework;
+using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;
 using OrderService.Application.Commands.CreateOrder;
 using OrderService.Domain.Models;
@@ -10,9 +11,9 @@ using OrderService.Domain.Entities;
 using OrderService.Application.Commands.CancelOrder;
 using OrderService.Application.Commands.UpdateOrderAddress;
 using OrderService.Application.Commands.UpdateOrderItems;
-using OrderService.Tests.Helpers;
+using OrderService.Infrastructure.Helpers;
 
-namespace OrderService.Tests.IntegrationTests
+namespace OrderService.API.IntegrationTests
 {
     [TestFixture]
     public class OrderControllerTests

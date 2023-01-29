@@ -2,9 +2,10 @@ using AutoMapper;
 using NSubstitute;
 using OrderService.Application.Commands.UpdateOrderAddress;
 using OrderService.Infrastructure.Repositories;
-using OrderService.Tests.Helpers;
+using OrderService.Infrastructure.Helpers;
+using OrderService.Application.Mappers;
 
-namespace OrderService.Tests.UnitTests.Commands.UpdateOrderAddress
+namespace OrderService.Application.UnitTests.Commands.UpdateOrderAddress
 {
     [TestFixture]
     public class UpdateOrderAddressCommandHandlerTests
@@ -15,7 +16,7 @@ namespace OrderService.Tests.UnitTests.Commands.UpdateOrderAddress
         [SetUp]
         public void Setup()
         {
-            _mapper = AutoMapperHelper.CreateMapper();
+            _mapper = AutoMapping.CreateMapper();
             _orderRepository = new OrderRepository(DatabaseHelper.GetOrderDbContext());
         }
 

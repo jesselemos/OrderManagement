@@ -1,11 +1,12 @@
 using AutoMapper;
 using NSubstitute;
 using OrderService.Application.Commands.CancelOrder;
+using OrderService.Application.Mappers;
 using OrderService.Domain.Entities;
+using OrderService.Infrastructure.Helpers;
 using OrderService.Infrastructure.Repositories;
-using OrderService.Tests.Helpers;
 
-namespace OrderService.Tests.UnitTests.Commands.CancelOrder
+namespace OrderService.Application.UnitTests.Commands.CancelOrder
 {
     [TestFixture]
     public class CancelOrderCommandHandlerTests
@@ -16,7 +17,7 @@ namespace OrderService.Tests.UnitTests.Commands.CancelOrder
         [SetUp]
         public void Setup()
         {
-            _mapper = AutoMapperHelper.CreateMapper();
+            _mapper = AutoMapping.CreateMapper();
             _orderRepository = new OrderRepository(DatabaseHelper.GetOrderDbContext());
         }
 

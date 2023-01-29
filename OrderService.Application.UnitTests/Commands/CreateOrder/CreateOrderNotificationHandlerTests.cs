@@ -2,9 +2,9 @@ using NSubstitute;
 using OrderService.Application.Commands.CreateOrder;
 using OrderService.Domain.Models;
 using OrderService.Infrastructure.Repositories;
-using OrderService.Tests.Helpers;
+using OrderService.Infrastructure.Helpers;
 
-namespace OrderService.Tests.UnitTests.Commands.CreateOrder
+namespace OrderService.Application.UnitTests.Commands.CreateOrder
 {
     [TestFixture]
     public class CreateOrderNotificationHandlerTests

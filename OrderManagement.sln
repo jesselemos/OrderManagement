@@ -5,7 +5,7 @@ VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderService.API", "OrderService.API\OrderService.API.csproj", "{93A4D19E-0F2A-45A9-A44B-09321BF89BF4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderService.Tests", "OrderService.Tests\OrderService.Tests.csproj", "{538C3C72-D458-405F-BFD9-0D5A431A4CE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderService.Application.UnitTests", "OrderService.Application.UnitTests\OrderService.Application.UnitTests.csproj", "{538C3C72-D458-405F-BFD9-0D5A431A4CE1}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{56742D9A-EB99-4561-8B59-770BA475B320}"
 EndProject
@@ -14,11 +14,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService.Domain", "OrderService.Domain\OrderService.Domain.csproj", "{6B4FF75E-4CDF-4F51-B6E8-CFA6EF961B03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderService.Domain", "OrderService.Domain\OrderService.Domain.csproj", "{6B4FF75E-4CDF-4F51-B6E8-CFA6EF961B03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService.Application", "OrderService.Application\OrderService.Application.csproj", "{51D4930B-1796-40AA-A5D4-4517E9EC5709}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderService.Application", "OrderService.Application\OrderService.Application.csproj", "{51D4930B-1796-40AA-A5D4-4517E9EC5709}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService.Infrastructure", "OrderService.Infrastructure\OrderService.Infrastructure.csproj", "{24B1ED01-57A9-4092-92E6-B59F3AE1B739}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderService.Infrastructure", "OrderService.Infrastructure\OrderService.Infrastructure.csproj", "{24B1ED01-57A9-4092-92E6-B59F3AE1B739}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService.API.IntegrationTests", "OrderService.API.IntegrationTests\OrderService.API.IntegrationTests.csproj", "{2F39FFD2-4A70-4066-A2CA-069EBC085914}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,6 +52,10 @@ Global
 		{24B1ED01-57A9-4092-92E6-B59F3AE1B739}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24B1ED01-57A9-4092-92E6-B59F3AE1B739}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24B1ED01-57A9-4092-92E6-B59F3AE1B739}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F39FFD2-4A70-4066-A2CA-069EBC085914}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F39FFD2-4A70-4066-A2CA-069EBC085914}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F39FFD2-4A70-4066-A2CA-069EBC085914}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F39FFD2-4A70-4066-A2CA-069EBC085914}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

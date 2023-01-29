@@ -4,9 +4,10 @@ using OrderService.Application.Commands.CreateOrder;
 using OrderService.Domain.Entities;
 using OrderService.Domain.Models;
 using OrderService.Infrastructure.Repositories;
-using OrderService.Tests.Helpers;
+using OrderService.Infrastructure.Helpers;
+using OrderService.Application.Mappers;
 
-namespace OrderService.Tests.UnitTests.Commands.CreateOrder
+namespace OrderService.Application.UnitTests.Commands.CreateOrder
 {
     [TestFixture]
     public class CreateOrderCommandHandlerTests
@@ -18,7 +19,7 @@ namespace OrderService.Tests.UnitTests.Commands.CreateOrder
         [SetUp]
         public void Setup()
         {
-            _mapper = AutoMapperHelper.CreateMapper();
+            _mapper = AutoMapping.CreateMapper();
             var orderDbContext = DatabaseHelper.GetOrderDbContext();
             _orderRepository = new OrderRepository(orderDbContext);
             _productRepository = new ProductRepository(orderDbContext);

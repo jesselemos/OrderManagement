@@ -2,14 +2,14 @@
 using OrderService.Domain.Entities;
 using OrderService.Infrastructure.Repositories;
 
-namespace OrderService.Tests.Helpers
+namespace OrderService.Infrastructure.Helpers
 {
     public static class DatabaseHelper
     {
-        internal static Guid ProductSeedId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
-        internal static Guid ProductTwoSeedId = Guid.Parse("835c7288-b80d-4e61-9f39-cd8bc58dd668");
-        internal static Guid ProductThreeSeedId = Guid.Parse("8f6a6044-7ac0-4d17-8148-f0f520d571e5");
-        internal static Guid OrderSeedId = Guid.Parse("76ba2048-edfd-4ed5-a8a4-fe8ae40e492f");
+        public static readonly Guid ProductSeedId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+        public static readonly Guid ProductTwoSeedId = Guid.Parse("835c7288-b80d-4e61-9f39-cd8bc58dd668");
+        public static readonly Guid ProductThreeSeedId = Guid.Parse("8f6a6044-7ac0-4d17-8148-f0f520d571e5");
+        public static readonly Guid OrderSeedId = Guid.Parse("76ba2048-edfd-4ed5-a8a4-fe8ae40e492f");
         public static OrderDbContext GetOrderDbContext()
         {
             var orderDbContextOptions = new DbContextOptionsBuilder<OrderDbContext>()

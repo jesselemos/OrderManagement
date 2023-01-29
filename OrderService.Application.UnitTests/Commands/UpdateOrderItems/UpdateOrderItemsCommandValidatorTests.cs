@@ -1,8 +1,8 @@
 ﻿using OrderService.Application.Commands.UpdateOrderItems;
 using OrderService.Domain.Models;
-using OrderService.Tests.Helpers;
+using OrderService.Infrastructure.Helpers;
 
-namespace OrderService.Tests.UnitTests.Commands.UpdateOrderItems
+namespace OrderService.Application.UnitTests.Commands.UpdateOrderItems
 {
     [TestFixture]
     public class UpdateOrderItemsCommandValidatorTests

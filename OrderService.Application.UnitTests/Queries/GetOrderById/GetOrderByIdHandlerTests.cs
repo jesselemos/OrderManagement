@@ -1,8 +1,8 @@
 using OrderService.Application.Queries.GetOrderById;
 using OrderService.Infrastructure.Repositories;
-using OrderService.Tests.Helpers;
+using OrderService.Infrastructure.Helpers;
 
-namespace OrderService.Tests.UnitTests.Queries.GetOrderById
+namespace OrderService.Application.UnitTests.Queries.GetOrderById
 {
     [TestFixture]
     public class GetOrderByIdHandlerTests

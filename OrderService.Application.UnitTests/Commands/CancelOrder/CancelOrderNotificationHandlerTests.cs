@@ -1,13 +1,12 @@
 using NSubstitute;
-using OrderService.Application.Commands.UpdateOrderItems;
-using OrderService.Domain.Models;
+using OrderService.Application.Commands.CancelOrder;
 using OrderService.Infrastructure.Repositories;
-using OrderService.Tests.Helpers;
+using OrderService.Infrastructure.Helpers;
 
-namespace OrderService.Tests.UnitTests.Commands.UpdateOrderItems
+namespace OrderService.Application.UnitTests.Commands.CancelOrder
 {
     [TestFixture]
-    public class UpdateOrderItemsNotificationHandlerTests
+    public class CancelOrderNotificationHandlerTests
     {
         private IOrderRepository _orderRepository;
         private IProductRepository _productRepository;
@@ -21,14 +20,14 @@ namespace OrderService.Tests.UnitTests.Commands.UpdateOrderItems
         }
 
         [Test]
-        public async Task CanUpdateOrderItemsNotificationAndProductStockIsDecreased()
+        public async Task CanCancelOrderNotificationAndProductStockIsDecreased()
         {
             var productId = DatabaseHelper.ProductSeedId;
             var product = await _productRepository.GetProductByIdAsync(productId);
             var oldStock = product?.Stock;
-            await new UpdateOrderItemsNotificationHandler(_orderRepository, _productRepository).Handle(
-                new UpdateOrderItemsNotification
-                (new UpdateOrderItemsCommand()
+            await new CancelOrderNotificationHandler(_orderRepository, _productRepository).Handle(
+                new CancelOrderNotification
+                (new CancelOrderCommand()
                 {
                     OrderId = DatabaseHelper.OrderSeedId,
                 }), new CancellationToken());
@@ -42,15 +41,15 @@ namespace OrderService.Tests.UnitTests.Commands.UpdateOrderItems
         [Test]
         public void ThrowExceptionIfOrderNotExistsInDatabase()
         {
-            var handler = new UpdateOrderItemsNotificationHandler(_orderRepository, Substitute.For<IProductRepository>());
+            var handler = new CancelOrderNotificationHandler(_orderRepository, Substitute.For<IProductRepository>());
             var orderId = Guid.NewGuid();
 
             Assert.That(async () =>
                 await handler.Handle(
-                    new UpdateOrderItemsNotification(
-                        new UpdateOrderItemsCommand()
+                    new CancelOrderNotification(
+                        new CancelOrderCommand()
                         {
-                            OrderId = orderId
+                            OrderId = orderId,
                         }), new CancellationToken()),
                         Throws.TypeOf<ArgumentNullException>()
                         .With.Message.Contains($"OrderId: {orderId} not found in our database."));
@@ -59,23 +58,14 @@ namespace OrderService.Tests.UnitTests.Commands.UpdateOrderItems
         [Test]
         public void DoesNotThrowExceptionIfProductDoesNotExistsInDatabaseToUpdateTheOtherItems()
         {
-            var handler = new UpdateOrderItemsNotificationHandler(_orderRepository, Substitute.For<IProductRepository>());
+            var handler = new CancelOrderNotificationHandler(_orderRepository, Substitute.For<IProductRepository>());
 
             Assert.That(async () =>
                 await handler.Handle(
-                    new UpdateOrderItemsNotification(
-                        new UpdateOrderItemsCommand()
+                    new CancelOrderNotification(
+                        new CancelOrderCommand()
                         {
                             OrderId = DatabaseHelper.OrderSeedId,
-                            OrderItems = new List<CreateOrderItem>
-                            {
-                                new CreateOrderItem
-                                {
-                                    ProductId = Guid.Empty,
-                                    Quantity = 1
-                                }
-                            }
-
                         }), new CancellationToken()),
                         Throws.Nothing);
         }
