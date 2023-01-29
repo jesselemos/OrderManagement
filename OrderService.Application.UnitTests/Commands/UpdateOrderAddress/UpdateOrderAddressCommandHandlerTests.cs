@@ -2,7 +2,7 @@ using AutoMapper;
 using NSubstitute;
 using OrderService.Application.Commands.UpdateOrderAddress;
 using OrderService.Infrastructure.Repositories;
-using OrderService.Infrastructure.Helpers;
+using OrderService.Infrastructure.DataSeed;
 using OrderService.Application.Mappers;
 
 namespace OrderService.Application.UnitTests.Commands.UpdateOrderAddress
@@ -14,10 +14,10 @@ namespace OrderService.Application.UnitTests.Commands.UpdateOrderAddress
         private IMapper _mapper;
 
         [SetUp]
-        public void Setup()
+        public async Task Setup()
         {
             _mapper = AutoMapping.CreateMapper();
-            _orderRepository = new OrderRepository(DatabaseHelper.GetOrderDbContext());
+            _orderRepository = new OrderRepository(await DbSeed.GetInMemoryOrderDbContext());
         }
 
         [Test]
@@ -26,14 +26,14 @@ namespace OrderService.Application.UnitTests.Commands.UpdateOrderAddress
             await new UpdateOrderAddressCommandHandler(_orderRepository, _mapper).Handle(
                 new UpdateOrderAddressCommand()
                 {
-                    OrderId = DatabaseHelper.OrderSeedId,
+                    OrderId = DbSeed.OrderSeedId,
                     AddressLine = "New AddressLine",
                     AddressName = "New AddressName",
                     EirCode = "NewCode",
                     County = "New County",
                 }, new CancellationToken());
 
-            var order = await _orderRepository.GetOrderByIdAsync(DatabaseHelper.OrderSeedId) ?? new();
+            var order = await _orderRepository.GetOrderByIdAsync(DbSeed.OrderSeedId) ?? new();
 
             Assert.Multiple(() =>
             {

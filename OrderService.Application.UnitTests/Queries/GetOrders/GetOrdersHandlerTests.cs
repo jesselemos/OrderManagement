@@ -1,6 +1,6 @@
 using OrderService.Application.Queries.GetOrders;
 using OrderService.Infrastructure.Repositories;
-using OrderService.Infrastructure.Helpers;
+using OrderService.Infrastructure.DataSeed;
 
 namespace OrderService.Application.UnitTests.Queries.GetOrders
 {
@@ -10,9 +10,9 @@ namespace OrderService.Application.UnitTests.Queries.GetOrders
         private IOrderRepository _orderRepository;
 
         [SetUp]
-        public void Setup()
+        public async Task Setup()
         {
-            _orderRepository = new OrderRepository(DatabaseHelper.GetOrderDbContext());
+            _orderRepository = new OrderRepository(await DbSeed.GetInMemoryOrderDbContext());
         }
 
         [Test]

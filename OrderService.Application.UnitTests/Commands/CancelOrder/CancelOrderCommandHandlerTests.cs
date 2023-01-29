@@ -3,7 +3,7 @@ using NSubstitute;
 using OrderService.Application.Commands.CancelOrder;
 using OrderService.Application.Mappers;
 using OrderService.Domain.Entities;
-using OrderService.Infrastructure.Helpers;
+using OrderService.Infrastructure.DataSeed;
 using OrderService.Infrastructure.Repositories;
 
 namespace OrderService.Application.UnitTests.Commands.CancelOrder
@@ -15,10 +15,10 @@ namespace OrderService.Application.UnitTests.Commands.CancelOrder
         private IMapper _mapper;
 
         [SetUp]
-        public void Setup()
+        public async Task Setup()
         {
             _mapper = AutoMapping.CreateMapper();
-            _orderRepository = new OrderRepository(DatabaseHelper.GetOrderDbContext());
+            _orderRepository = new OrderRepository(await DbSeed.GetInMemoryOrderDbContext());
         }
 
         [Test]
@@ -27,10 +27,10 @@ namespace OrderService.Application.UnitTests.Commands.CancelOrder
             await new CancelOrderCommandHandler(_orderRepository, _mapper).Handle(
                 new CancelOrderCommand()
                 {
-                    OrderId = DatabaseHelper.OrderSeedId
+                    OrderId = DbSeed.OrderSeedId
                 }, new CancellationToken());
 
-            var order = await _orderRepository.GetOrderByIdAsync(DatabaseHelper.OrderSeedId);
+            var order = await _orderRepository.GetOrderByIdAsync(DbSeed.OrderSeedId);
 
             Assert.Multiple(() =>
             {

@@ -1,6 +1,6 @@
 using OrderService.Application.Queries.GetOrderById;
 using OrderService.Infrastructure.Repositories;
-using OrderService.Infrastructure.Helpers;
+using OrderService.Infrastructure.DataSeed;
 
 namespace OrderService.Application.UnitTests.Queries.GetOrderById
 {
@@ -10,18 +10,18 @@ namespace OrderService.Application.UnitTests.Queries.GetOrderById
         private IOrderRepository _orderRepository;
 
         [SetUp]
-        public void Setup()
+        public async Task Setup()
         {
-            _orderRepository = new OrderRepository(DatabaseHelper.GetOrderDbContext());
+            _orderRepository = new OrderRepository(await DbSeed.GetInMemoryOrderDbContext());
         }
 
         [Test]
         public async Task GetOrderByIdHandlerReturnsCorrectOrder()
         {
             var order = await new GetOrderByIdHandler(_orderRepository).Handle(
-                new GetOrderByIdQuery(DatabaseHelper.OrderSeedId), new CancellationToken());
+                new GetOrderByIdQuery(DbSeed.OrderSeedId), new CancellationToken());
 
-            var orderToMatch = await _orderRepository.GetOrderByIdAsync(DatabaseHelper.OrderSeedId);
+            var orderToMatch = await _orderRepository.GetOrderByIdAsync(DbSeed.OrderSeedId);
 
             Assert.Multiple(() =>
             {

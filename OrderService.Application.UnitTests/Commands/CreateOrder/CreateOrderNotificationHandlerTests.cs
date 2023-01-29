@@ -2,7 +2,7 @@ using NSubstitute;
 using OrderService.Application.Commands.CreateOrder;
 using OrderService.Domain.Models;
 using OrderService.Infrastructure.Repositories;
-using OrderService.Infrastructure.Helpers;
+using OrderService.Infrastructure.DataSeed;
 
 namespace OrderService.Application.UnitTests.Commands.CreateOrder
 {
@@ -12,15 +12,15 @@ namespace OrderService.Application.UnitTests.Commands.CreateOrder
         private IProductRepository _productRepository;
 
         [SetUp]
-        public void Setup()
+        public async Task Setup()
         {
-            _productRepository = new ProductRepository(DatabaseHelper.GetOrderDbContext());
+            _productRepository = new ProductRepository(await DbSeed.GetInMemoryOrderDbContext());
         }
 
         [Test]
         public async Task CanCreateOrderNotificationAndProductStockIsDecreased()
         {
-            var productId = DatabaseHelper.ProductSeedId;
+            var productId = DbSeed.ProductSeedId;
             var orderQuantity = 2;
             var product = await _productRepository.GetProductByIdAsync(productId);
             var oldStock = product?.Stock;
@@ -79,7 +79,7 @@ namespace OrderService.Application.UnitTests.Commands.CreateOrder
         public async Task ThrowExceptionIfThereIsNotEnoughStockForTheProductAsync()
         {
             var handler = new CreateOrderNotificationHandler(_productRepository);
-            var productId = DatabaseHelper.ProductSeedId;
+            var productId = DbSeed.ProductSeedId;
             var product = await _productRepository.GetProductByIdAsync(productId);
 
             Assert.That(async () =>

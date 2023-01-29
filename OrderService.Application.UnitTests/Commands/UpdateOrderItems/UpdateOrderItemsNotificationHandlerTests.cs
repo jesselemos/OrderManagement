@@ -2,7 +2,7 @@ using NSubstitute;
 using OrderService.Application.Commands.UpdateOrderItems;
 using OrderService.Domain.Models;
 using OrderService.Infrastructure.Repositories;
-using OrderService.Infrastructure.Helpers;
+using OrderService.Infrastructure.DataSeed;
 
 namespace OrderService.Application.UnitTests.Commands.UpdateOrderItems
 {
@@ -13,9 +13,9 @@ namespace OrderService.Application.UnitTests.Commands.UpdateOrderItems
         private IProductRepository _productRepository;
 
         [SetUp]
-        public void Setup()
+        public async Task Setup()
         {
-            var orderDbContext = DatabaseHelper.GetOrderDbContext();
+            var orderDbContext = await DbSeed.GetInMemoryOrderDbContext();
             _orderRepository = new OrderRepository(orderDbContext);
             _productRepository = new ProductRepository(orderDbContext);
         }
@@ -23,17 +23,17 @@ namespace OrderService.Application.UnitTests.Commands.UpdateOrderItems
         [Test]
         public async Task CanUpdateOrderItemsNotificationAndProductStockIsDecreased()
         {
-            var productId = DatabaseHelper.ProductSeedId;
+            var productId = DbSeed.ProductSeedId;
             var product = await _productRepository.GetProductByIdAsync(productId);
             var oldStock = product?.Stock;
             await new UpdateOrderItemsNotificationHandler(_orderRepository, _productRepository).Handle(
                 new UpdateOrderItemsNotification
                 (new UpdateOrderItemsCommand()
                 {
-                    OrderId = DatabaseHelper.OrderSeedId,
+                    OrderId = DbSeed.OrderSeedId,
                 }), new CancellationToken());
 
-            var order = await _orderRepository.GetOrderByIdAsync(DatabaseHelper.OrderSeedId);
+            var order = await _orderRepository.GetOrderByIdAsync(DbSeed.OrderSeedId);
             var prodQuantity = order?.OrderItems.Find(f => f.Product?.Id == productId)?.Quantity;
 
             Assert.That(product?.Stock, Is.EqualTo(oldStock + prodQuantity));
@@ -66,7 +66,7 @@ namespace OrderService.Application.UnitTests.Commands.UpdateOrderItems
                     new UpdateOrderItemsNotification(
                         new UpdateOrderItemsCommand()
                         {
-                            OrderId = DatabaseHelper.OrderSeedId,
+                            OrderId = DbSeed.OrderSeedId,
                             OrderItems = new List<CreateOrderItem>
                             {
                                 new CreateOrderItem

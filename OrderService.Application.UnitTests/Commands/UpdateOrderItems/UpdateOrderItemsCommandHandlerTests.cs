@@ -2,7 +2,7 @@ using NSubstitute;
 using OrderService.Application.Commands.UpdateOrderItems;
 using OrderService.Domain.Models;
 using OrderService.Infrastructure.Repositories;
-using OrderService.Infrastructure.Helpers;
+using OrderService.Infrastructure.DataSeed;
 
 namespace OrderService.Application.UnitTests.Commands.UpdateOrderItems
 {
@@ -13,9 +13,9 @@ namespace OrderService.Application.UnitTests.Commands.UpdateOrderItems
         private IProductRepository _productRepository;
 
         [SetUp]
-        public void Setup()
+        public async Task Setup()
         {
-            var orderDbContext = DatabaseHelper.GetOrderDbContext();
+            var orderDbContext = await DbSeed.GetInMemoryOrderDbContext();
             _orderRepository = new OrderRepository(orderDbContext);
             _productRepository = new ProductRepository(orderDbContext);
         }
@@ -26,18 +26,18 @@ namespace OrderService.Application.UnitTests.Commands.UpdateOrderItems
             await new UpdateOrderItemsCommandHandler(_orderRepository, _productRepository).Handle(
                 new UpdateOrderItemsCommand()
                 {
-                    OrderId = DatabaseHelper.OrderSeedId,
+                    OrderId = DbSeed.OrderSeedId,
                     OrderItems = new List<CreateOrderItem>
                     {
                         new CreateOrderItem
                         {
-                            ProductId = DatabaseHelper.ProductSeedId,
+                            ProductId = DbSeed.ProductSeedId,
                             Quantity = 10
                         }
                     }
                 }, new CancellationToken());
 
-            var order = await _orderRepository.GetOrderByIdAsync(DatabaseHelper.OrderSeedId);
+            var order = await _orderRepository.GetOrderByIdAsync(DbSeed.OrderSeedId);
 
             Assert.Multiple(() =>
             {
@@ -72,7 +72,7 @@ namespace OrderService.Application.UnitTests.Commands.UpdateOrderItems
                 await commandHandler.Handle(
                     new UpdateOrderItemsCommand()
                     {
-                        OrderId = DatabaseHelper.OrderSeedId,
+                        OrderId = DbSeed.OrderSeedId,
                         OrderItems = new List<CreateOrderItem>
                         {
                             new CreateOrderItem
@@ -90,14 +90,14 @@ namespace OrderService.Application.UnitTests.Commands.UpdateOrderItems
         public async Task ThrowExceptionIfThereIsNotEnoughStockForTheProductAsync()
         {
             var commandHandler = new UpdateOrderItemsCommandHandler(_orderRepository, _productRepository);
-            var productId = DatabaseHelper.ProductSeedId;
+            var productId = DbSeed.ProductSeedId;
             var product = await _productRepository.GetProductByIdAsync(productId);
 
             Assert.That(async () =>
                     await commandHandler.Handle(
                         new UpdateOrderItemsCommand()
                         {
-                            OrderId = DatabaseHelper.OrderSeedId,
+                            OrderId = DbSeed.OrderSeedId,
                             OrderItems = new List<CreateOrderItem>
                             {
                                 new CreateOrderItem

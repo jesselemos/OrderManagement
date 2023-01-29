@@ -11,9 +11,9 @@ using OrderService.Domain.Entities;
 using OrderService.Application.Commands.CancelOrder;
 using OrderService.Application.Commands.UpdateOrderAddress;
 using OrderService.Application.Commands.UpdateOrderItems;
-using OrderService.Infrastructure.Helpers;
+using OrderService.Infrastructure.DataSeed;
 
-namespace OrderService.API.IntegrationTests
+namespace OrderService.API.IntegrationTests.Controllers
 {
     [TestFixture]
     public class OrderControllerTests
@@ -25,7 +25,7 @@ namespace OrderService.API.IntegrationTests
             get
             {
                 var context = _factory.Services.CreateScope().ServiceProvider.GetService<OrderDbContext>();
-                return new ProductRepository(context ?? DatabaseHelper.GetOrderDbContext());
+                return new ProductRepository(context ?? DbSeed.GetInMemoryOrderDbContext().Result);
             }
         }
 
@@ -40,9 +40,9 @@ namespace OrderService.API.IntegrationTests
         public async Task CreateOrderSetsCreatedStatusAndDecreasesProductStock()
         {
             //Arrange
-            var productId = DatabaseHelper.ProductSeedId;
-            var productTwoId = DatabaseHelper.ProductTwoSeedId;
-            var productThreeId = DatabaseHelper.ProductThreeSeedId;
+            var productId = DbSeed.ProductSeedId;
+            var productTwoId = DbSeed.ProductTwoSeedId;
+            var productThreeId = DbSeed.ProductThreeSeedId;
             var productQuantityToOrder = 10;
             var productBeforeOrder = await ProductRepository.GetProductByIdAsync(productId);
             var productTwoBeforeOrder = await ProductRepository.GetProductByIdAsync(productTwoId);
@@ -72,8 +72,8 @@ namespace OrderService.API.IntegrationTests
         public async Task CancelOrderSetsCanceledStatusAndReturnsStockToTheProducts()
         {
             //Arrange
-            var productId = DatabaseHelper.ProductSeedId;
-            var productTwoId = DatabaseHelper.ProductTwoSeedId;
+            var productId = DbSeed.ProductSeedId;
+            var productTwoId = DbSeed.ProductTwoSeedId;
             var productQuantityToOrder = 10;
             var productBeforeOrder = await ProductRepository.GetProductByIdAsync(productId);
             var productTwoBeforeOrder = await ProductRepository.GetProductByIdAsync(productTwoId);
@@ -114,7 +114,7 @@ namespace OrderService.API.IntegrationTests
         public async Task UpdateOrderAddressSetsTheAddressCorrectly()
         {
             //Arrange
-            var orderStub = GetCreateOrderCommandStub(DatabaseHelper.ProductSeedId);
+            var orderStub = GetCreateOrderCommandStub(DbSeed.ProductSeedId);
             var content = new StringContent(JsonConvert.SerializeObject(orderStub), Encoding.UTF8, "application/json");
             var createdOrder = await _httpClient.PostAsync($"/api/v1/order", content);
             var receiveStream = await createdOrder.Content.ReadAsStreamAsync();
@@ -156,15 +156,15 @@ namespace OrderService.API.IntegrationTests
         public async Task UpdateOrderItemsSetsTheItemsAndProductStocksCorrectly()
         {
             //Arrange
-            var productId = DatabaseHelper.ProductSeedId;
-            var productTwoId = DatabaseHelper.ProductTwoSeedId;
-            var productThreeId = DatabaseHelper.ProductThreeSeedId;
+            var productId = DbSeed.ProductSeedId;
+            var productTwoId = DbSeed.ProductTwoSeedId;
+            var productThreeId = DbSeed.ProductThreeSeedId;
             var productQuantityToOrder = 10;
             var productBeforeOrder = await ProductRepository.GetProductByIdAsync(productId);
             var productTwoBeforeOrder = await ProductRepository.GetProductByIdAsync(productTwoId);
             var productThreeBeforeOrder = await ProductRepository.GetProductByIdAsync(productThreeId);
-            var orderStub = GetCreateOrderCommandStub(DatabaseHelper.ProductSeedId);
-            orderStub.OrderItems.Add(new CreateOrderItem { ProductId = DatabaseHelper.ProductTwoSeedId, Quantity = productQuantityToOrder });
+            var orderStub = GetCreateOrderCommandStub(DbSeed.ProductSeedId);
+            orderStub.OrderItems.Add(new CreateOrderItem { ProductId = DbSeed.ProductTwoSeedId, Quantity = productQuantityToOrder });
             var content = new StringContent(JsonConvert.SerializeObject(orderStub), Encoding.UTF8, "application/json");
             var createdOrder = await _httpClient.PostAsync($"/api/v1/order", content);
             var receiveStream = await createdOrder.Content.ReadAsStreamAsync();
@@ -246,7 +246,7 @@ namespace OrderService.API.IntegrationTests
         public async Task GetOrderByIdReturnsCreatedOrder()
         {
             //Arrange
-            var orderStub = GetCreateOrderCommandStub(DatabaseHelper.ProductSeedId);
+            var orderStub = GetCreateOrderCommandStub(DbSeed.ProductSeedId);
             var content = new StringContent(JsonConvert.SerializeObject(orderStub), Encoding.UTF8, "application/json");
             var createdOrder = await _httpClient.PostAsync($"/api/v1/Order", content);
             var receiveStream = await createdOrder.Content.ReadAsStreamAsync();
@@ -277,7 +277,7 @@ namespace OrderService.API.IntegrationTests
             //Arrange
             var take = 10;
             var skip = 0;
-            var orderStub = GetCreateOrderCommandStub(DatabaseHelper.ProductSeedId);
+            var orderStub = GetCreateOrderCommandStub(DbSeed.ProductSeedId);
             var content = new StringContent(JsonConvert.SerializeObject(orderStub), Encoding.UTF8, "application/json");
             var createdOrder = await _httpClient.PostAsync($"/api/v1/Order", content);
 

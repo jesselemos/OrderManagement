@@ -1,6 +1,6 @@
 ﻿using OrderService.Application.Commands.UpdateOrderItems;
 using OrderService.Domain.Models;
-using OrderService.Infrastructure.Helpers;
+using OrderService.Infrastructure.DataSeed;
 
 namespace OrderService.Application.UnitTests.Commands.UpdateOrderItems
 {
@@ -18,7 +18,7 @@ namespace OrderService.Application.UnitTests.Commands.UpdateOrderItems
                     {
                         new CreateOrderItem
                         {
-                            ProductId = DatabaseHelper.ProductSeedId,
+                            ProductId = DbSeed.ProductSeedId,
                             Quantity = 10
                         }
                     }

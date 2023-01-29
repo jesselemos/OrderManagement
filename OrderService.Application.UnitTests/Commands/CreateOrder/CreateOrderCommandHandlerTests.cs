@@ -4,7 +4,7 @@ using OrderService.Application.Commands.CreateOrder;
 using OrderService.Domain.Entities;
 using OrderService.Domain.Models;
 using OrderService.Infrastructure.Repositories;
-using OrderService.Infrastructure.Helpers;
+using OrderService.Infrastructure.DataSeed;
 using OrderService.Application.Mappers;
 
 namespace OrderService.Application.UnitTests.Commands.CreateOrder
@@ -17,10 +17,10 @@ namespace OrderService.Application.UnitTests.Commands.CreateOrder
         private IMapper _mapper;
 
         [SetUp]
-        public void Setup()
+        public async Task Setup()
         {
             _mapper = AutoMapping.CreateMapper();
-            var orderDbContext = DatabaseHelper.GetOrderDbContext();
+            var orderDbContext = await DbSeed.GetInMemoryOrderDbContext();
             _orderRepository = new OrderRepository(orderDbContext);
             _productRepository = new ProductRepository(orderDbContext);
         }
@@ -40,13 +40,13 @@ namespace OrderService.Application.UnitTests.Commands.CreateOrder
                     {
                         new CreateOrderItem
                         {
-                            ProductId = DatabaseHelper.ProductSeedId,
+                            ProductId = DbSeed.ProductSeedId,
                             Quantity = 10
                         }
                     }
                 }, new CancellationToken());
 
-            var order = await _orderRepository.GetOrderByIdAsync(DatabaseHelper.OrderSeedId);
+            var order = await _orderRepository.GetOrderByIdAsync(DbSeed.OrderSeedId);
 
             Assert.Multiple(() =>
             {
@@ -117,7 +117,7 @@ namespace OrderService.Application.UnitTests.Commands.CreateOrder
         public async Task ThrowExceptionIfThereIsNotEnoughStockForTheProductAsync()
         {
             var commandHandler = new CreateOrderCommandHandler(_orderRepository, _productRepository, _mapper);
-            var productId = DatabaseHelper.ProductSeedId;
+            var productId = DbSeed.ProductSeedId;
             var product = await _productRepository.GetProductByIdAsync(productId);
 
             Assert.That(async () =>

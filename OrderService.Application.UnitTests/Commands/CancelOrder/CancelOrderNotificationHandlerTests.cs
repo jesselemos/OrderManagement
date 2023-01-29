@@ -1,7 +1,7 @@
 using NSubstitute;
 using OrderService.Application.Commands.CancelOrder;
 using OrderService.Infrastructure.Repositories;
-using OrderService.Infrastructure.Helpers;
+using OrderService.Infrastructure.DataSeed;
 
 namespace OrderService.Application.UnitTests.Commands.CancelOrder
 {
@@ -12,9 +12,9 @@ namespace OrderService.Application.UnitTests.Commands.CancelOrder
         private IProductRepository _productRepository;
 
         [SetUp]
-        public void Setup()
+        public async Task Setup()
         {
-            var orderDbContext = DatabaseHelper.GetOrderDbContext();
+            var orderDbContext = await DbSeed.GetInMemoryOrderDbContext();
             _orderRepository = new OrderRepository(orderDbContext);
             _productRepository = new ProductRepository(orderDbContext);
         }
@@ -22,17 +22,17 @@ namespace OrderService.Application.UnitTests.Commands.CancelOrder
         [Test]
         public async Task CanCancelOrderNotificationAndProductStockIsDecreased()
         {
-            var productId = DatabaseHelper.ProductSeedId;
+            var productId = DbSeed.ProductSeedId;
             var product = await _productRepository.GetProductByIdAsync(productId);
             var oldStock = product?.Stock;
             await new CancelOrderNotificationHandler(_orderRepository, _productRepository).Handle(
                 new CancelOrderNotification
                 (new CancelOrderCommand()
                 {
-                    OrderId = DatabaseHelper.OrderSeedId,
+                    OrderId = DbSeed.OrderSeedId,
                 }), new CancellationToken());
 
-            var order = await _orderRepository.GetOrderByIdAsync(DatabaseHelper.OrderSeedId);
+            var order = await _orderRepository.GetOrderByIdAsync(DbSeed.OrderSeedId);
             var prodQuantity = order?.OrderItems.Find(f => f.Product?.Id == productId)?.Quantity;
 
             Assert.That(product?.Stock, Is.EqualTo(oldStock + prodQuantity));
@@ -65,7 +65,7 @@ namespace OrderService.Application.UnitTests.Commands.CancelOrder
                     new CancelOrderNotification(
                         new CancelOrderCommand()
                         {
-                            OrderId = DatabaseHelper.OrderSeedId,
+                            OrderId = DbSeed.OrderSeedId,
                         }), new CancellationToken()),
                         Throws.Nothing);
         }
