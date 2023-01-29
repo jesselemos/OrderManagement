@@ -241,7 +241,7 @@ namespace OrderService.API.IntegrationTests.Controllers
             {
                 Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
                 Assert.That(order.Any());
-                Assert.That(order.Count, Is.EqualTo(take));
+                Assert.That(order, Has.Count.EqualTo(take));
             });
         }
 
