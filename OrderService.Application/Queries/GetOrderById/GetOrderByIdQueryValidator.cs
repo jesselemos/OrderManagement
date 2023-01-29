@@ -6,7 +6,8 @@ namespace OrderService.Application.Queries.GetOrderById
     {
         public GetOrderByIdQueryValidator()
         {
-            RuleFor(p => p.OrderId).NotEmpty().WithMessage("{OrderId} is required.").NotNull();
+            RuleFor(p => p.OrderId)
+                .NotEmpty().WithMessage("{OrderId} is required.").NotNull();
         }
     }
 }

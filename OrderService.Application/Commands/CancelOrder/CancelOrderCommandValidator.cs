@@ -6,7 +6,8 @@ namespace OrderService.Application.Commands.CancelOrder
     {
         public CancelOrderCommandValidator()
         {
-            RuleFor(p => p.OrderId).NotEmpty().WithMessage("{OrderId} is required.").NotNull();
+            RuleFor(p => p.OrderId)
+                .NotEmpty().WithMessage("{OrderId} is required.").NotNull();
         }
     }
 }

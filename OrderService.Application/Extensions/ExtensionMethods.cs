@@ -27,8 +27,7 @@ namespace OrderService.Application.Extensions
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddDbContext<OrderDbContext>(opt =>
-            opt.UseInMemoryDatabase("OrderDb")
-            .EnableSensitiveDataLogging());
+            opt.UseInMemoryDatabase("OrderDb").EnableSensitiveDataLogging());
             services.AddScoped<IDbInitializer, DbInitializer>();
             services.AddHealthChecks().AddDbContextCheck<OrderDbContext>();
             return services;
