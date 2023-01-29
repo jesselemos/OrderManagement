@@ -40,31 +40,26 @@ namespace OrderService.API.IntegrationTests.Controllers
         public async Task CreateOrderSetsCreatedStatusAndDecreasesProductStock()
         {
             //Arrange
-            var productId = DbSeed.ProductSeedId;
-            var productTwoId = DbSeed.ProductTwoSeedId;
-            var productThreeId = DbSeed.ProductThreeSeedId;
-            var productQuantityToOrder = 10;
-            var productBeforeOrder = await ProductRepository.GetProductByIdAsync(productId);
-            var productTwoBeforeOrder = await ProductRepository.GetProductByIdAsync(productTwoId);
-            var productThreeBeforeOrder = await ProductRepository.GetProductByIdAsync(productThreeId);
-            var orderStub = GetCreateOrderCommandStub(productId, productQuantityToOrder);
-            orderStub.OrderItems.Add(new CreateOrderItem { ProductId = productTwoId, Quantity = productQuantityToOrder });
-            orderStub.OrderItems.Add(new CreateOrderItem { ProductId = productThreeId, Quantity = productQuantityToOrder });
-            var content = new StringContent(JsonConvert.SerializeObject(orderStub), Encoding.UTF8, "application/json");
+            var productBeforeOrder = await ProductRepository.GetProductByIdAsync(DbSeed.ProductSeedId);
+            var productTwoBeforeOrder = await ProductRepository.GetProductByIdAsync(DbSeed.ProductTwoSeedId);
+            var productThreeBeforeOrder = await ProductRepository.GetProductByIdAsync(DbSeed.ProductThreeSeedId);
 
             // Act
-            var result = await _httpClient.PostAsync($"/api/v1/order", content);
+            var orderId = await CreateOrderApi();
 
             //assert
-            var productAfterOrder = await ProductRepository.GetProductByIdAsync(productId);
-            var productTwoAfterOrder = await ProductRepository.GetProductByIdAsync(productTwoId);
-            var productThreeAfterOrder = await ProductRepository.GetProductByIdAsync(productThreeId);
+            var productAfterOrder = await ProductRepository.GetProductByIdAsync(DbSeed.ProductSeedId);
+            var productTwoAfterOrder = await ProductRepository.GetProductByIdAsync(DbSeed.ProductTwoSeedId);
+            var productThreeAfterOrder = await ProductRepository.GetProductByIdAsync(DbSeed.ProductThreeSeedId);
+            var productQuantityOrdered = 10;
+            var order = await GetOrderApi(orderId);
+
             Assert.Multiple(() =>
             {
-                Assert.That(productAfterOrder?.Stock, Is.EqualTo(productBeforeOrder?.Stock - productQuantityToOrder));
-                Assert.That(productTwoAfterOrder?.Stock, Is.EqualTo(productTwoBeforeOrder?.Stock - productQuantityToOrder));
-                Assert.That(productThreeAfterOrder?.Stock, Is.EqualTo(productThreeBeforeOrder?.Stock - productQuantityToOrder));
-                Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.Created));
+                Assert.That(order.OrderStatus, Is.EqualTo(OrderStatus.Created));
+                Assert.That(productAfterOrder?.Stock, Is.EqualTo(productBeforeOrder?.Stock - productQuantityOrdered));
+                Assert.That(productTwoAfterOrder?.Stock, Is.EqualTo(productTwoBeforeOrder?.Stock - productQuantityOrdered));
+                Assert.That(productThreeAfterOrder?.Stock, Is.EqualTo(productThreeBeforeOrder?.Stock - productQuantityOrdered));
             });
         }
 
@@ -72,41 +67,29 @@ namespace OrderService.API.IntegrationTests.Controllers
         public async Task CancelOrderSetsCanceledStatusAndReturnsStockToTheProducts()
         {
             //Arrange
-            var productId = DbSeed.ProductSeedId;
-            var productTwoId = DbSeed.ProductTwoSeedId;
-            var productQuantityToOrder = 10;
-            var productBeforeOrder = await ProductRepository.GetProductByIdAsync(productId);
-            var productTwoBeforeOrder = await ProductRepository.GetProductByIdAsync(productTwoId);
-            var orderStub = GetCreateOrderCommandStub(productId);
-            orderStub.OrderItems.Add(new CreateOrderItem { ProductId = productTwoId, Quantity = productQuantityToOrder });
-            var content = new StringContent(JsonConvert.SerializeObject(orderStub), Encoding.UTF8, "application/json");
-            var createdOrder = await _httpClient.PostAsync($"/api/v1/order", content);
-            var receiveStream = await createdOrder.Content.ReadAsStreamAsync();
-            var readStream = new StreamReader(receiveStream, Encoding.UTF8);
-            var stringContent = readStream.ReadToEnd();
-            var createdOrderId = JsonConvert.DeserializeObject<Guid>(stringContent);
+            var productBeforeOrder = await ProductRepository.GetProductByIdAsync(DbSeed.ProductSeedId);
+            var productTwoBeforeOrder = await ProductRepository.GetProductByIdAsync(DbSeed.ProductTwoSeedId);
+            var productThreeBeforeOrder = await ProductRepository.GetProductByIdAsync(DbSeed.ProductThreeSeedId);
+            var orderId = await CreateOrderApi();
 
             // Act
-            var command = new CancelOrderCommand { OrderId = createdOrderId };
-            content = new StringContent(JsonConvert.SerializeObject(command), Encoding.UTF8, "application/json");
+            var command = new CancelOrderCommand { OrderId = orderId };
+            var content = new StringContent(JsonConvert.SerializeObject(command), Encoding.UTF8, "application/json");
             var cancelResult = await _httpClient.PutAsync($"/api/v1/order/cancel", content);
 
             //assert
-            var productAfterOrder = await ProductRepository.GetProductByIdAsync(productId);
-            var productTwoAfterOrder = await ProductRepository.GetProductByIdAsync(productTwoId);
-
-            var getOrderResult = await _httpClient.GetAsync($"/api/v1/Order/{createdOrderId}");
-            receiveStream = await getOrderResult.Content.ReadAsStreamAsync();
-            readStream = new StreamReader(receiveStream, Encoding.UTF8);
-            stringContent = readStream.ReadToEnd();
-            var returnedOrder = JsonConvert.DeserializeObject<Order>(stringContent) ?? new();
+            var productAfterOrder = await ProductRepository.GetProductByIdAsync(DbSeed.ProductSeedId);
+            var productTwoAfterOrder = await ProductRepository.GetProductByIdAsync(DbSeed.ProductTwoSeedId);
+            var productThreeAfterOrder = await ProductRepository.GetProductByIdAsync(DbSeed.ProductThreeSeedId);
+            var order = await GetOrderApi(orderId);
 
             Assert.Multiple(() =>
             {
+                Assert.That(cancelResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+                Assert.That(order.OrderStatus, Is.EqualTo(OrderStatus.Canceled));
                 Assert.That(productAfterOrder?.Stock, Is.EqualTo(productBeforeOrder?.Stock));
                 Assert.That(productTwoAfterOrder?.Stock, Is.EqualTo(productTwoBeforeOrder?.Stock));
-                Assert.That(cancelResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-                Assert.That(returnedOrder.OrderStatus, Is.EqualTo(OrderStatus.Canceled));
+                Assert.That(productThreeAfterOrder?.Stock, Is.EqualTo(productThreeBeforeOrder?.Stock));
             });
         }
 
@@ -114,41 +97,31 @@ namespace OrderService.API.IntegrationTests.Controllers
         public async Task UpdateOrderAddressSetsTheAddressCorrectly()
         {
             //Arrange
-            var orderStub = GetCreateOrderCommandStub(DbSeed.ProductSeedId);
-            var content = new StringContent(JsonConvert.SerializeObject(orderStub), Encoding.UTF8, "application/json");
-            var createdOrder = await _httpClient.PostAsync($"/api/v1/order", content);
-            var receiveStream = await createdOrder.Content.ReadAsStreamAsync();
-            var readStream = new StreamReader(receiveStream, Encoding.UTF8);
-            var stringContent = readStream.ReadToEnd();
-            var createdOrderId = JsonConvert.DeserializeObject<Guid>(stringContent);
-
-            // Act
+            var orderId = await CreateOrderApi();
             var command = new UpdateOrderAddressCommand()
             {
-                OrderId = createdOrderId,
+                OrderId = orderId,
                 AddressLine = "Apartment 7, New Address Line",
                 AddressName = "New Work Address",
                 EirCode = "V01HT01",
                 County = "New County"
             };
-            content = new StringContent(JsonConvert.SerializeObject(command), Encoding.UTF8, "application/json");
-            var updateAddressResult = await _httpClient.PutAsync($"/api/v1/order/address", content);
+
+            // Act
+            var content = new StringContent(JsonConvert.SerializeObject(command), Encoding.UTF8, "application/json");
+            var result = await _httpClient.PutAsync($"/api/v1/order/address", content);
 
             //assert
-            var getOrderResult = await _httpClient.GetAsync($"/api/v1/Order/{createdOrderId}");
-            receiveStream = await getOrderResult.Content.ReadAsStreamAsync();
-            readStream = new StreamReader(receiveStream, Encoding.UTF8);
-            stringContent = readStream.ReadToEnd();
-            var returnedOrder = JsonConvert.DeserializeObject<Order>(stringContent) ?? new();
+            var order = await GetOrderApi(orderId);
 
             Assert.Multiple(() =>
             {
-                Assert.That(updateAddressResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-                Assert.That(returnedOrder.OrderStatus, Is.EqualTo(OrderStatus.Created));
-                Assert.That(returnedOrder.AddressLine, Is.EqualTo("Apartment 7, New Address Line"));
-                Assert.That(returnedOrder.AddressName, Is.EqualTo("New Work Address"));
-                Assert.That(returnedOrder.EirCode, Is.EqualTo("V01HT01"));
-                Assert.That(returnedOrder.County, Is.EqualTo("New County"));
+                Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+                Assert.That(order.OrderStatus, Is.EqualTo(OrderStatus.Created));
+                Assert.That(order.AddressLine, Is.EqualTo("Apartment 7, New Address Line"));
+                Assert.That(order.AddressName, Is.EqualTo("New Work Address"));
+                Assert.That(order.EirCode, Is.EqualTo("V01HT01"));
+                Assert.That(order.County, Is.EqualTo("New County"));
             });
         }
 
@@ -156,50 +129,40 @@ namespace OrderService.API.IntegrationTests.Controllers
         public async Task UpdateOrderItemsSetsTheItemsAndProductStocksCorrectly()
         {
             //Arrange
-            var productId = DbSeed.ProductSeedId;
-            var productTwoId = DbSeed.ProductTwoSeedId;
-            var productThreeId = DbSeed.ProductThreeSeedId;
             var productQuantityToOrder = 10;
-            var productBeforeOrder = await ProductRepository.GetProductByIdAsync(productId);
-            var productTwoBeforeOrder = await ProductRepository.GetProductByIdAsync(productTwoId);
-            var productThreeBeforeOrder = await ProductRepository.GetProductByIdAsync(productThreeId);
-            var orderStub = GetCreateOrderCommandStub(DbSeed.ProductSeedId);
-            orderStub.OrderItems.Add(new CreateOrderItem { ProductId = DbSeed.ProductTwoSeedId, Quantity = productQuantityToOrder });
-            var content = new StringContent(JsonConvert.SerializeObject(orderStub), Encoding.UTF8, "application/json");
-            var createdOrder = await _httpClient.PostAsync($"/api/v1/order", content);
-            var receiveStream = await createdOrder.Content.ReadAsStreamAsync();
-            var readStream = new StreamReader(receiveStream, Encoding.UTF8);
-            var stringContent = readStream.ReadToEnd();
-            var createdOrderId = JsonConvert.DeserializeObject<Guid>(stringContent);
+            var productBeforeOrder = await ProductRepository.GetProductByIdAsync(DbSeed.ProductSeedId);
+            var productTwoBeforeOrder = await ProductRepository.GetProductByIdAsync(DbSeed.ProductTwoSeedId);
+            var productThreeBeforeOrder = await ProductRepository.GetProductByIdAsync(DbSeed.ProductThreeSeedId);
+            var orderId = await CreateOrderApi();
 
             var productTwoNewQuantity = 2;
             // Act
             var command = new UpdateOrderItemsCommand()
             {
-                OrderId = createdOrderId,
+                OrderId = orderId,
                 OrderItems = new List<CreateOrderItem>
                 {
                     //productOne left out on purpose
                     new CreateOrderItem
                     {
-                        ProductId = productTwoId,
+                        ProductId = DbSeed.ProductTwoSeedId,
                         Quantity = productTwoNewQuantity
                     },
                     //new product
                     new CreateOrderItem
                     {
-                        ProductId = productThreeId,
+                        ProductId = DbSeed.ProductThreeSeedId,
                         Quantity = productQuantityToOrder
                     },
                 }
             };
-            content = new StringContent(JsonConvert.SerializeObject(command), Encoding.UTF8, "application/json");
+            var content = new StringContent(JsonConvert.SerializeObject(command), Encoding.UTF8, "application/json");
             var updateItemsResult = await _httpClient.PutAsync($"/api/v1/order/items", content);
 
             //asserting product stock
-            var productAfterOrder = await ProductRepository.GetProductByIdAsync(productId);
-            var productTwoAfterOrder = await ProductRepository.GetProductByIdAsync(productTwoId);
-            var productThreeAfterOrder = await ProductRepository.GetProductByIdAsync(productThreeId);
+            var productAfterOrder = await ProductRepository.GetProductByIdAsync(DbSeed.ProductSeedId);
+            var productTwoAfterOrder = await ProductRepository.GetProductByIdAsync(DbSeed.ProductTwoSeedId);
+            var productThreeAfterOrder = await ProductRepository.GetProductByIdAsync(DbSeed.ProductThreeSeedId);
             Assert.Multiple(() =>
             {
                 Assert.That(productAfterOrder?.Stock, Is.EqualTo(productBeforeOrder?.Stock));
@@ -209,28 +172,24 @@ namespace OrderService.API.IntegrationTests.Controllers
             });
 
             //asserting new orderItens are as expected
-            var getOrderResult = await _httpClient.GetAsync($"/api/v1/Order/{createdOrderId}");
-            receiveStream = await getOrderResult.Content.ReadAsStreamAsync();
-            readStream = new StreamReader(receiveStream, Encoding.UTF8);
-            stringContent = readStream.ReadToEnd();
-            var returnedOrder = JsonConvert.DeserializeObject<Order>(stringContent) ?? new();
+            var order = await GetOrderApi(orderId);
 
             Assert.Multiple(() =>
             {
                 Assert.That(updateItemsResult.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-                Assert.That(returnedOrder.OrderItems, Has.Count.EqualTo(2));
-                Assert.That(!returnedOrder.OrderItems.Any(f => f.Product.Id == productId));
-                Assert.That(returnedOrder.OrderItems.Single(f => f.Product.Id == productTwoId).Quantity, Is.EqualTo(productTwoNewQuantity));
-                Assert.That(returnedOrder.OrderItems.Single(f => f.Product.Id == productThreeId).Quantity, Is.EqualTo(productQuantityToOrder));
+                Assert.That(order.OrderItems, Has.Count.EqualTo(2));
+                Assert.That(!order.OrderItems.Any(f => f.Product.Id == DbSeed.ProductSeedId));
+                Assert.That(order.OrderItems.Single(f => f.Product.Id == DbSeed.ProductTwoSeedId).Quantity, Is.EqualTo(productTwoNewQuantity));
+                Assert.That(order.OrderItems.Single(f => f.Product.Id == DbSeed.ProductThreeSeedId).Quantity, Is.EqualTo(productQuantityToOrder));
             });
         }
 
         [Test]
-        public async Task CreateOrderWithInvalidRequestReturnsValidationErrors()
+        public async Task CreateOrderWithInvalidRequestReturnsError()
         {
             //Arrange
-            var orderStub = new CreateOrderCommand();
-            var content = new StringContent(JsonConvert.SerializeObject(orderStub), Encoding.UTF8, "application/json");
+            var content = new StringContent(JsonConvert.SerializeObject(
+                new CreateOrderCommand()), Encoding.UTF8, "application/json");
 
             // Act
             var result = await _httpClient.PostAsync($"/api/v1/order", content);
@@ -238,66 +197,82 @@ namespace OrderService.API.IntegrationTests.Controllers
             //assert
             Assert.Multiple(() =>
             {
-                Assert.That(result.StatusCode, Is.Not.EqualTo(HttpStatusCode.OK));
+                Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.InternalServerError));
             });
         }
 
         [Test]
-        public async Task GetOrderByIdReturnsCreatedOrder()
+        public async Task GetOrderByIdQueryReturnsCreatedOrder()
         {
             //Arrange
-            var orderStub = GetCreateOrderCommandStub(DbSeed.ProductSeedId);
-            var content = new StringContent(JsonConvert.SerializeObject(orderStub), Encoding.UTF8, "application/json");
-            var createdOrder = await _httpClient.PostAsync($"/api/v1/Order", content);
-            var receiveStream = await createdOrder.Content.ReadAsStreamAsync();
-            var readStream = new StreamReader(receiveStream, Encoding.UTF8);
-            var stringContent = readStream.ReadToEnd();
-            var createdOrderId = JsonConvert.DeserializeObject<Guid>(stringContent);
+            var orderId = await CreateOrderApi();
 
             // Act
-            var result = await _httpClient.GetAsync($"/api/v1/Order/{createdOrderId}");
-            receiveStream = await result.Content.ReadAsStreamAsync();
-            readStream = new StreamReader(receiveStream, Encoding.UTF8);
-            stringContent = readStream.ReadToEnd();
-            var returnedOrder = JsonConvert.DeserializeObject<Order>(stringContent) ?? new();
+            var order = await GetOrderApi(orderId);
 
             //assert
             Assert.Multiple(() =>
             {
-                Assert.That(createdOrder.StatusCode, Is.EqualTo(HttpStatusCode.Created));
-                Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-                Assert.That(returnedOrder.OrderStatus, Is.EqualTo(OrderStatus.Created));
-                Assert.That(returnedOrder.Total, Is.EqualTo(60));
+                Assert.That(order.OrderStatus, Is.EqualTo(OrderStatus.Created));
+                Assert.That(order.Total, Is.EqualTo(110));
             });
         }
 
         [Test]
-        public async Task GetOrdersReturnsPaginatedOrders()
+        public async Task GetOrdersQueryReturnsPaginatedOrders()
         {
             //Arrange
-            var take = 10;
-            var skip = 0;
-            var orderStub = GetCreateOrderCommandStub(DbSeed.ProductSeedId);
-            var content = new StringContent(JsonConvert.SerializeObject(orderStub), Encoding.UTF8, "application/json");
-            var createdOrder = await _httpClient.PostAsync($"/api/v1/Order", content);
+            var take = 10; var skip = 0;
+
+            for (int i = 0; i < take; i++)
+            {
+                await CreateOrderApi();
+            }
 
             // Act
             var result = await _httpClient.GetAsync($"/api/v1/Order/{take}/{skip}");
             var receiveStream = await result.Content.ReadAsStreamAsync();
             var readStream = new StreamReader(receiveStream, Encoding.UTF8);
             var stringContent = readStream.ReadToEnd();
-            var returnedOrder = JsonConvert.DeserializeObject<List<Order>>(stringContent) ?? new();
+            var order = JsonConvert.DeserializeObject<List<Order>>(stringContent) ?? new();
 
             //assert
             Assert.Multiple(() =>
             {
-                Assert.That(createdOrder.StatusCode, Is.EqualTo(HttpStatusCode.Created));
                 Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-                Assert.That(returnedOrder.Any());
+                Assert.That(order.Any());
+                Assert.That(order.Count, Is.EqualTo(take));
             });
         }
 
-        private static CreateOrderCommand GetCreateOrderCommandStub(Guid productId, int quantity = 10)
+        private async Task<Order> GetOrderApi(Guid orderId)
+        {
+            var result = await _httpClient.GetAsync($"/api/v1/Order/{orderId}");
+            var receiveStream = await result.Content.ReadAsStreamAsync();
+            var readStream = new StreamReader(receiveStream, Encoding.UTF8);
+            var stringContent = readStream.ReadToEnd();
+
+            Assert.That(result.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+
+            return JsonConvert.DeserializeObject<Order>(stringContent) ?? new();
+        }
+
+        private async Task<Guid> CreateOrderApi(CreateOrderCommand? orderCommand = null)
+        {
+            var content = new StringContent(JsonConvert.SerializeObject(
+                orderCommand ?? GetCreateOrderCommandStub()),
+                Encoding.UTF8, "application/json");
+            var createdOrder = await _httpClient.PostAsync($"/api/v1/Order", content);
+            var receiveStream = await createdOrder.Content.ReadAsStreamAsync();
+            var readStream = new StreamReader(receiveStream, Encoding.UTF8);
+            var stringContent = readStream.ReadToEnd();
+
+            Assert.That(createdOrder.StatusCode, Is.EqualTo(HttpStatusCode.Created));
+
+            return JsonConvert.DeserializeObject<Guid>(stringContent);
+        }
+
+        private static CreateOrderCommand GetCreateOrderCommandStub()
         {
             return new CreateOrderCommand()
             {
@@ -310,8 +285,18 @@ namespace OrderService.API.IntegrationTests.Controllers
                     {
                         new CreateOrderItem
                         {
-                            ProductId = productId,
-                            Quantity = quantity
+                            ProductId = DbSeed.ProductSeedId,
+                            Quantity = 10
+                        },
+                        new CreateOrderItem
+                        {
+                            ProductId = DbSeed.ProductTwoSeedId,
+                            Quantity = 10
+                        },
+                        new CreateOrderItem
+                        {
+                            ProductId = DbSeed.ProductThreeSeedId,
+                            Quantity = 10
                         }
                     }
             };
