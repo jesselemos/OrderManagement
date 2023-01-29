@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 using OrderService.Application.Behaviours;
 using System.Reflection;
 using FluentValidation;
+using OrderService.Infrastructure.DataSeed;
+using OrderService.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace OrderService.Application.Extensions
 {
@@ -21,7 +24,13 @@ namespace OrderService.Application.Extensions
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
-
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddDbContext<OrderDbContext>(opt =>
+            opt.UseInMemoryDatabase("OrderDb")
+            .EnableSensitiveDataLogging());
+            services.AddScoped<IDbInitializer, DbInitializer>();
+            services.AddHealthChecks().AddDbContextCheck<OrderDbContext>();
             return services;
         }
     }

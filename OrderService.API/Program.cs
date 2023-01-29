@@ -1,5 +1,3 @@
-using OrderService.Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using OrderService.Application.Extensions;
 using OrderService.Infrastructure.DataSeed;
@@ -8,15 +6,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddApplication();
-
-builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddDbContext<OrderDbContext>(opt =>
-opt.UseInMemoryDatabase("OrderDb")
-.EnableSensitiveDataLogging());
-builder.Services.AddScoped<IDbInitializer, DbInitializer>();
-builder.Services.AddHealthChecks().AddDbContextCheck<OrderDbContext>();
-
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -32,7 +21,6 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
-
 var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
 using (var scope = scopeFactory.CreateScope())
 {
@@ -49,11 +37,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHealthChecks("/health");
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
 
 //This line is necessary for Integration Tests
