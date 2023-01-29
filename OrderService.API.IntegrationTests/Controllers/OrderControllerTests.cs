@@ -1,17 +1,17 @@
-﻿using NUnit.Framework;
-using Microsoft.AspNetCore.Mvc.Testing;
-using System.Net;
-using OrderService.Application.Commands.CreateOrder;
-using OrderService.Domain.Models;
-using Newtonsoft.Json;
-using System.Text;
-using OrderService.Infrastructure.Repositories;
+﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
-using OrderService.Domain.Entities;
+using Newtonsoft.Json;
+using NUnit.Framework;
 using OrderService.Application.Commands.CancelOrder;
+using OrderService.Application.Commands.CreateOrder;
 using OrderService.Application.Commands.UpdateOrderAddress;
 using OrderService.Application.Commands.UpdateOrderItems;
+using OrderService.Domain.Entities;
+using OrderService.Domain.Models;
 using OrderService.Infrastructure.DataSeed;
+using OrderService.Infrastructure.Repositories;
+using System.Net;
+using System.Text;
 
 namespace OrderService.API.IntegrationTests.Controllers
 {

@@ -1,12 +1,12 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using OrderService.Application.Behaviours;
-using System.Reflection;
-using FluentValidation;
 using OrderService.Infrastructure.DataSeed;
 using OrderService.Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace OrderService.Application.Extensions
 {

@@ -1,8 +1,8 @@
 using NSubstitute;
 using OrderService.Application.Commands.UpdateOrderItems;
 using OrderService.Domain.Models;
-using OrderService.Infrastructure.Repositories;
 using OrderService.Infrastructure.DataSeed;
+using OrderService.Infrastructure.Repositories;
 
 namespace OrderService.Application.UnitTests.Commands.UpdateOrderItems
 {

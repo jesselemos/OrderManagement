@@ -3,12 +3,8 @@ using OrderService.Application.Extensions;
 using OrderService.Infrastructure.DataSeed;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 builder.Services.AddApplication();
 builder.Services.AddControllers();
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -40,8 +36,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
-
-//This line is necessary for Integration Tests
 #pragma warning disable S1118 // Utility classes should not have public constructors
-public partial class Program { }
+public partial class Program { } //This line is necessary for Integration Tests
 #pragma warning restore S1118 // Utility classes should not have public constructors

@@ -1,11 +1,11 @@
 using AutoMapper;
 using NSubstitute;
 using OrderService.Application.Commands.CreateOrder;
+using OrderService.Application.Mappers;
 using OrderService.Domain.Entities;
 using OrderService.Domain.Models;
-using OrderService.Infrastructure.Repositories;
 using OrderService.Infrastructure.DataSeed;
-using OrderService.Application.Mappers;
+using OrderService.Infrastructure.Repositories;
 
 namespace OrderService.Application.UnitTests.Commands.CreateOrder
 {

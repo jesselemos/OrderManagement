@@ -1,6 +1,6 @@
 using OrderService.Application.Queries.GetOrderById;
-using OrderService.Infrastructure.Repositories;
 using OrderService.Infrastructure.DataSeed;
+using OrderService.Infrastructure.Repositories;
 
 namespace OrderService.Application.UnitTests.Queries.GetOrderById
 {

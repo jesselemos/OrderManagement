@@ -10,34 +10,17 @@ namespace OrderService.Infrastructure.Repositories
         {
             _orderDbContext = orderDbContext;
         }
-
-        public async Task<IEnumerable<Order>> GetAllOrdersAsync(int take, int skip)
-        {
-            var orderList =
-                await _orderDbContext
-                .Orders
-                .Include("OrderItems")
-                .Include("OrderItems.Product")
-                .OrderByDescending(o => o.CreatedDate)
-                .Take(take)
-                .Skip(skip)
-                .ToListAsync();
-            return orderList;
-        }
-
         public async Task CreateOrderAsync(Order order)
         {
             _orderDbContext.Orders.Add(order);
             await _orderDbContext.SaveChangesAsync();
         }
-
         public async Task UpdateOrderAsync(Order order)
         {
             _orderDbContext.Entry(order).State = EntityState.Modified;
             _orderDbContext.Entry(order).CurrentValues.SetValues(order);
             await _orderDbContext.SaveChangesAsync();
         }
-
         public async Task UpdateOrderItemsAsync(Order order, List<OrderItem> newItems)
         {
             _orderDbContext.Entry(order).State = EntityState.Modified;
@@ -68,7 +51,6 @@ namespace OrderService.Infrastructure.Repositories
 
             await _orderDbContext.SaveChangesAsync();
         }
-
         public async Task<Order?> GetOrderByIdAsync(Guid id)
         {
             return await _orderDbContext
@@ -76,6 +58,19 @@ namespace OrderService.Infrastructure.Repositories
                 .Include("OrderItems")
                 .Include("OrderItems.Product")
                 .SingleOrDefaultAsync(s => s.Id == id);
+        }
+        public async Task<IEnumerable<Order>> GetAllOrdersAsync(int take, int skip)
+        {
+            var orderList =
+                await _orderDbContext
+                .Orders
+                .Include("OrderItems")
+                .Include("OrderItems.Product")
+                .OrderByDescending(o => o.CreatedDate)
+                .Take(take)
+                .Skip(skip)
+                .ToListAsync();
+            return orderList;
         }
     }
 }

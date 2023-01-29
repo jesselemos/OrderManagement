@@ -1,9 +1,9 @@
 using AutoMapper;
 using NSubstitute;
 using OrderService.Application.Commands.UpdateOrderAddress;
-using OrderService.Infrastructure.Repositories;
-using OrderService.Infrastructure.DataSeed;
 using OrderService.Application.Mappers;
+using OrderService.Infrastructure.DataSeed;
+using OrderService.Infrastructure.Repositories;
 
 namespace OrderService.Application.UnitTests.Commands.UpdateOrderAddress
 {
