@@ -1,9 +1,9 @@
 using NSubstitute;
 using OrderService.Application.Commands.CancelOrder;
 using OrderService.Infrastructure.Repositories;
-using OrderService.API.Tests.UnitTests.Helpers;
+using OrderService.Tests.UnitTests.Helpers;
 
-namespace OrderService.API.Tests.UnitTests.Commands.CancelOrder
+namespace OrderService.Tests.UnitTests.Commands.CancelOrder
 {
     [TestFixture]
     public class CancelOrderNotificationHandlerTests

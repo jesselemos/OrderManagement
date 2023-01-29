@@ -1,6 +1,6 @@
 ﻿using OrderService.Application.Commands.UpdateOrderAddress;
 
-namespace OrderService.API.Tests.UnitTests.Commands.UpdateOrderAddress
+namespace OrderService.Tests.UnitTests.Commands.UpdateOrderAddress
 {
     [TestFixture]
     public class UpdateOrderAddressCommandValidatorTests

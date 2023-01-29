@@ -1,6 +1,6 @@
 ﻿using OrderService.Application.Queries.GetOrderById;
 
-namespace OrderService.API.Tests.UnitTests.Queries.GetOrderById
+namespace OrderService.Tests.UnitTests.Queries.GetOrderById
 {
     [TestFixture]
     public class GetOrderByIdQueryValidatorTests

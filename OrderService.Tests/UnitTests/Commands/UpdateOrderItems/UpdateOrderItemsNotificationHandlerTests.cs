@@ -2,9 +2,9 @@ using NSubstitute;
 using OrderService.Application.Commands.UpdateOrderItems;
 using OrderService.Domain.Models;
 using OrderService.Infrastructure.Repositories;
-using OrderService.API.Tests.UnitTests.Helpers;
+using OrderService.Tests.UnitTests.Helpers;
 
-namespace OrderService.API.Tests.UnitTests.Commands.UpdateOrderItems
+namespace OrderService.Tests.UnitTests.Commands.UpdateOrderItems
 {
     [TestFixture]
     public class UpdateOrderItemsNotificationHandlerTests

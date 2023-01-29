@@ -2,9 +2,9 @@ using AutoMapper;
 using NSubstitute;
 using OrderService.Application.Commands.UpdateOrderAddress;
 using OrderService.Infrastructure.Repositories;
-using OrderService.API.Tests.UnitTests.Helpers;
+using OrderService.Tests.UnitTests.Helpers;
 
-namespace OrderService.API.Tests.UnitTests.Commands.UpdateOrderAddress
+namespace OrderService.Tests.UnitTests.Commands.UpdateOrderAddress
 {
     [TestFixture]
     public class UpdateOrderAddressCommandHandlerTests

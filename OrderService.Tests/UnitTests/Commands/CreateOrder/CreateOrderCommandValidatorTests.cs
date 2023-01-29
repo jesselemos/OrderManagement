@@ -1,8 +1,8 @@
 ﻿using OrderService.Application.Commands.CreateOrder;
 using OrderService.Domain.Models;
-using OrderService.API.Tests.UnitTests.Helpers;
+using OrderService.Tests.UnitTests.Helpers;
 
-namespace OrderService.API.Tests.UnitTests.Commands.CreateOrder
+namespace OrderService.Tests.UnitTests.Commands.CreateOrder
 {
     [TestFixture]
     public class CreateOrderCommandValidatorTests

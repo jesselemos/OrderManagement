@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;
-using OrderService.API.Tests.UnitTests.Helpers;
 using OrderService.Application.Commands.CreateOrder;
 using OrderService.Domain.Models;
 using Newtonsoft.Json;
@@ -11,8 +10,9 @@ using OrderService.Domain.Entities;
 using OrderService.Application.Commands.CancelOrder;
 using OrderService.Application.Commands.UpdateOrderAddress;
 using OrderService.Application.Commands.UpdateOrderItems;
+using OrderService.Tests.UnitTests.Helpers;
 
-namespace OrderService.API.Tests.IntegrationTests
+namespace OrderService.Tests.IntegrationTests
 {
     [TestFixture]
     public class OrderControllerTests
@@ -258,7 +258,7 @@ namespace OrderService.API.Tests.IntegrationTests
             receiveStream = await result.Content.ReadAsStreamAsync();
             readStream = new StreamReader(receiveStream, Encoding.UTF8);
             stringContent = readStream.ReadToEnd();
-            var returnedOrder = JsonConvert.DeserializeObject<Order>(stringContent)??new();
+            var returnedOrder = JsonConvert.DeserializeObject<Order>(stringContent) ?? new();
 
             //assert
             Assert.Multiple(() =>

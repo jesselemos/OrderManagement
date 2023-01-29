@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using OrderService.Application.Mappers;
 
-namespace OrderService.API.Tests.UnitTests.Helpers
+namespace OrderService.Tests.UnitTests.Helpers
 {
     public static class AutoMapperHelper
     {
