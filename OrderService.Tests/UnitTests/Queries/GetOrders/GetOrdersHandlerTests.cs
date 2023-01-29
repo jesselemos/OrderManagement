@@ -1,6 +1,6 @@
 using OrderService.Application.Queries.GetOrders;
 using OrderService.Infrastructure.Repositories;
-using OrderService.Tests.UnitTests.Helpers;
+using OrderService.Tests.Helpers;
 
 namespace OrderService.Tests.UnitTests.Queries.GetOrders
 {

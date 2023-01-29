@@ -10,7 +10,7 @@ using OrderService.Domain.Entities;
 using OrderService.Application.Commands.CancelOrder;
 using OrderService.Application.Commands.UpdateOrderAddress;
 using OrderService.Application.Commands.UpdateOrderItems;
-using OrderService.Tests.UnitTests.Helpers;
+using OrderService.Tests.Helpers;
 
 namespace OrderService.Tests.IntegrationTests
 {

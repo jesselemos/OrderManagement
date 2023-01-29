@@ -1,6 +1,6 @@
 ﻿using OrderService.Application.Commands.UpdateOrderItems;
 using OrderService.Domain.Models;
-using OrderService.Tests.UnitTests.Helpers;
+using OrderService.Tests.Helpers;
 
 namespace OrderService.Tests.UnitTests.Commands.UpdateOrderItems
 {

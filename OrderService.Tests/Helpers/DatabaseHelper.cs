@@ -2,7 +2,7 @@
 using OrderService.Domain.Entities;
 using OrderService.Infrastructure.Repositories;
 
-namespace OrderService.API.Tests.UnitTests.Helpers
+namespace OrderService.Tests.Helpers
 {
     public static class DatabaseHelper
     {

@@ -2,7 +2,7 @@ using AutoMapper;
 using NSubstitute;
 using OrderService.Application.Commands.UpdateOrderAddress;
 using OrderService.Infrastructure.Repositories;
-using OrderService.Tests.UnitTests.Helpers;
+using OrderService.Tests.Helpers;
 
 namespace OrderService.Tests.UnitTests.Commands.UpdateOrderAddress
 {
