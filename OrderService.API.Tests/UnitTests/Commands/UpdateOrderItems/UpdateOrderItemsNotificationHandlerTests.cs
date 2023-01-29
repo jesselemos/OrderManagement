@@ -1,7 +1,7 @@
 using NSubstitute;
-using OrderService.API.Commands.UpdateOrderItems;
-using OrderService.API.Models;
-using OrderService.API.Repositories;
+using OrderService.Application.Commands.UpdateOrderItems;
+using OrderService.Domain.Models;
+using OrderService.Infrastructure.Repositories;
 using OrderService.API.Tests.UnitTests.Helpers;
 
 namespace OrderService.API.Tests.UnitTests.Commands.UpdateOrderItems

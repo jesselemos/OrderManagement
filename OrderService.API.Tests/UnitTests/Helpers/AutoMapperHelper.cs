@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using OrderService.API.Mappers;
+using OrderService.Application.Mappers;
 
 namespace OrderService.API.Tests.UnitTests.Helpers
 {

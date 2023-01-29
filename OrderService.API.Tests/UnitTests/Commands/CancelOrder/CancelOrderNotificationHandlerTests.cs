@@ -1,6 +1,6 @@
 using NSubstitute;
-using OrderService.API.Commands.CancelOrder;
-using OrderService.API.Repositories;
+using OrderService.Application.Commands.CancelOrder;
+using OrderService.Infrastructure.Repositories;
 using OrderService.API.Tests.UnitTests.Helpers;
 
 namespace OrderService.API.Tests.UnitTests.Commands.CancelOrder

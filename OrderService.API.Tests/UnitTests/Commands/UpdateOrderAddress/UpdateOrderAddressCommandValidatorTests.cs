@@ -1,4 +1,4 @@
-﻿using OrderService.API.Commands.UpdateOrderAddress;
+﻿using OrderService.Application.Commands.UpdateOrderAddress;
 
 namespace OrderService.API.Tests.UnitTests.Commands.UpdateOrderAddress
 {

@@ -1,9 +1,9 @@
 using AutoMapper;
 using NSubstitute;
-using OrderService.API.Commands.CreateOrder;
-using OrderService.API.Entities;
-using OrderService.API.Models;
-using OrderService.API.Repositories;
+using OrderService.Application.Commands.CreateOrder;
+using OrderService.Domain.Entities;
+using OrderService.Domain.Models;
+using OrderService.Infrastructure.Repositories;
 using OrderService.API.Tests.UnitTests.Helpers;
 
 namespace OrderService.API.Tests.UnitTests.Commands.CreateOrder

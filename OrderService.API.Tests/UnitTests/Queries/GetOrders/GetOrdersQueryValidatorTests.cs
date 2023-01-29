@@ -1,4 +1,4 @@
-﻿using OrderService.API.Queries.GetOrders;
+﻿using OrderService.Application.Queries.GetOrders;
 
 namespace OrderService.API.Tests.UnitTests.Queries.GetOrders
 {

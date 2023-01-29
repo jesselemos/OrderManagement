@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;
 using OrderService.API.Tests.UnitTests.Helpers;
-using OrderService.API.Commands.CreateOrder;
-using OrderService.API.Models;
+using OrderService.Application.Commands.CreateOrder;
+using OrderService.Domain.Models;
 using Newtonsoft.Json;
 using System.Text;
-using OrderService.API.Repositories;
+using OrderService.Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
-using OrderService.API.Entities;
-using OrderService.API.Commands.CancelOrder;
-using OrderService.API.Commands.UpdateOrderAddress;
-using OrderService.API.Commands.UpdateOrderItems;
+using OrderService.Domain.Entities;
+using OrderService.Application.Commands.CancelOrder;
+using OrderService.Application.Commands.UpdateOrderAddress;
+using OrderService.Application.Commands.UpdateOrderItems;
 
 namespace OrderService.API.Tests.IntegrationTests
 {

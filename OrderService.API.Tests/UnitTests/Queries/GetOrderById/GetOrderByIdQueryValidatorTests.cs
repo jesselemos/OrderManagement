@@ -1,4 +1,4 @@
-﻿using OrderService.API.Queries.GetOrderById;
+﻿using OrderService.Application.Queries.GetOrderById;
 
 namespace OrderService.API.Tests.UnitTests.Queries.GetOrderById
 {

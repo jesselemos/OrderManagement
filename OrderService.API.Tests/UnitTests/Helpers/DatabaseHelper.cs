@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OrderService.API.Entities;
-using OrderService.API.Repositories;
+using OrderService.Domain.Entities;
+using OrderService.Infrastructure.Repositories;
 
 namespace OrderService.API.Tests.UnitTests.Helpers
 {

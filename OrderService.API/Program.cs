@@ -1,17 +1,13 @@
-using MediatR;
-using OrderService.API.Repositories;
-using System.Reflection;
-using FluentValidation;
-using OrderService.API.Behaviours;
+using OrderService.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
-using OrderService.API.Repositories.DataSeed;
 using Microsoft.OpenApi.Models;
+using OrderService.Application.Extensions;
+using OrderService.Infrastructure.DataSeed;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
-builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.AddApplication();
 
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -20,9 +16,6 @@ opt.UseInMemoryDatabase("OrderDb")
 .EnableSensitiveDataLogging());
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.AddHealthChecks().AddDbContextCheck<OrderDbContext>();
-
-builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
 builder.Services.AddControllers();
 

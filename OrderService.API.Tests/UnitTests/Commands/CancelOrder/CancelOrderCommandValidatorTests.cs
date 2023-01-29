@@ -1,4 +1,4 @@
-﻿using OrderService.API.Commands.CancelOrder;
+﻿using OrderService.Application.Commands.CancelOrder;
 
 namespace OrderService.API.Tests.UnitTests.Commands.CancelOrder
 {

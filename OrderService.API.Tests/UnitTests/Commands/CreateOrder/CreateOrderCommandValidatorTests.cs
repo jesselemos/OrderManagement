@@ -1,5 +1,5 @@
-﻿using OrderService.API.Commands.CreateOrder;
-using OrderService.API.Models;
+﻿using OrderService.Application.Commands.CreateOrder;
+using OrderService.Domain.Models;
 using OrderService.API.Tests.UnitTests.Helpers;
 
 namespace OrderService.API.Tests.UnitTests.Commands.CreateOrder
