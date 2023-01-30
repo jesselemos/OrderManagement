@@ -1,5 +1,6 @@
 using NSubstitute;
 using OrderService.Application.Commands.UpdateOrderItems;
+using OrderService.Domain.Interfaces;
 using OrderService.Domain.Models;
 using OrderService.Infrastructure.DataSeed;
 using OrderService.Infrastructure.Repositories;

@@ -2,6 +2,7 @@ using AutoMapper;
 using NSubstitute;
 using OrderService.Application.Commands.UpdateOrderAddress;
 using OrderService.Application.Mappers;
+using OrderService.Domain.Interfaces;
 using OrderService.Infrastructure.DataSeed;
 using OrderService.Infrastructure.Repositories;
 

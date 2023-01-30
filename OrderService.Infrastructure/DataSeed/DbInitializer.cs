@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using OrderService.Domain.Interfaces;
 using OrderService.Infrastructure.Repositories;
 
 namespace OrderService.Infrastructure.DataSeed

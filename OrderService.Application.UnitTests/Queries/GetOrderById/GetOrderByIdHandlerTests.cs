@@ -1,4 +1,5 @@
 using OrderService.Application.Queries.GetOrderById;
+using OrderService.Domain.Interfaces;
 using OrderService.Infrastructure.DataSeed;
 using OrderService.Infrastructure.Repositories;
 

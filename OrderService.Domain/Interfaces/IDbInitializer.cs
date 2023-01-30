@@ -1,4 +1,4 @@
-﻿namespace OrderService.Infrastructure.DataSeed
+﻿namespace OrderService.Domain.Interfaces
 {
     public interface IDbInitializer
     {

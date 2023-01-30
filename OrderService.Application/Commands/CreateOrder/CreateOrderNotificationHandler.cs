@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using OrderService.Infrastructure.Repositories;
+using OrderService.Domain.Interfaces;
 
 namespace OrderService.Application.Commands.CreateOrder
 {

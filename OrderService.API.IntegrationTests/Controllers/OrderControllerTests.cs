@@ -7,6 +7,7 @@ using OrderService.Application.Commands.CreateOrder;
 using OrderService.Application.Commands.UpdateOrderAddress;
 using OrderService.Application.Commands.UpdateOrderItems;
 using OrderService.Domain.Entities;
+using OrderService.Domain.Interfaces;
 using OrderService.Domain.Models;
 using OrderService.Infrastructure.DataSeed;
 using OrderService.Infrastructure.Repositories;

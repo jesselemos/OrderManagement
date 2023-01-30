@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using OrderService.Application.Behaviours;
+using OrderService.Domain.Interfaces;
 using OrderService.Infrastructure.DataSeed;
 using OrderService.Infrastructure.Repositories;
 using System.Reflection;

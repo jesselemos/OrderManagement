@@ -1,6 +1,6 @@
 using Microsoft.OpenApi.Models;
 using OrderService.Application.Extensions;
-using OrderService.Infrastructure.DataSeed;
+using OrderService.Domain.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplication();

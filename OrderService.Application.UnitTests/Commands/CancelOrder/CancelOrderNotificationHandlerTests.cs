@@ -1,5 +1,6 @@
 using NSubstitute;
 using OrderService.Application.Commands.CancelOrder;
+using OrderService.Domain.Interfaces;
 using OrderService.Infrastructure.DataSeed;
 using OrderService.Infrastructure.Repositories;
 

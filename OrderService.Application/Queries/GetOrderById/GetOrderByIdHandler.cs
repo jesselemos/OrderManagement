@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using OrderService.Domain.Entities;
-using OrderService.Infrastructure.Repositories;
+using OrderService.Domain.Interfaces;
 
 namespace OrderService.Application.Queries.GetOrderById
 {
